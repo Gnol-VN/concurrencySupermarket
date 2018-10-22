@@ -11,7 +11,8 @@ import java.util.List;
  * Created by Long laptop on 9/24/2018.
  */
 public class CheckoutTill {
-    private static int checkoutId;
+    private static int idCount;
+    private int checkoutId;
     private boolean workingStatus;
     private boolean lessThanFiveItems;
     private Scanner scanner;
@@ -19,7 +20,8 @@ public class CheckoutTill {
 
     public CheckoutTill(Scanner scanner) {
         this.scanner = scanner;
-        checkoutId++;
+        idCount++;
+        checkoutId = idCount;
         customerQueueList = new ArrayList<>();
         System.out.println("Added checkout till with checkoutId: " + checkoutId);
     }
@@ -63,9 +65,9 @@ public class CheckoutTill {
                     e.printStackTrace();
                 }
             }
-        int customerID = customerQueueList.get(0).getCustomerId();
+        int customerToBeRemoved = customerQueueList.get(0).getCustomerId();
         customerQueueList.remove(0);
-        System.out.println(ANSIColor.ANSI_BLACK + customerID
+        System.out.println(ANSIColor.ANSI_BLACK + customerToBeRemoved
                 + " finished at till "+ this.getCheckoutId()+ ANSIColor.ANSI_RESET );
         notifyAll();
 

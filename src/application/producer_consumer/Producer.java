@@ -10,17 +10,18 @@ import application.model.Customer;
 public class Producer extends Thread {
 
     /**
-     * Sleep 300ms to stimulate the entering people
+     * Sleep 100ms to stimulate the entering people
+     * Create customer and make this customer look for a queue
      */
     public void run(){
         for (int i = 0; i < Supermarket.NUMBER_OF_CUSTOMER; i++) {
             try {
-                Thread.sleep(300);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             try {
-//                checkoutTill.enqueue(new Customer(), Customer.MAXIMUM_PEOPLE_CAN_WAIT);
+//              Create customer and make this customer look for a queue
                 Customer customer = new Customer();
                 customer.look();
             } catch (InterruptedException e) {

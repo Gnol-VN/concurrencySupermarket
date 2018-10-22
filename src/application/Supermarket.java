@@ -13,13 +13,13 @@ import java.util.List;
  */
 public class Supermarket {
     //Constant
-    public static int NUMBER_OF_CHECKOUT_TILL = 1;
-    public static int NUMBER_OF_CUSTOMER = 20;
-    public static int TILL_LENGTH = 5;
+    public static int NUMBER_OF_CHECKOUT_TILL = 4;
+    public static int NUMBER_OF_CUSTOMER = 25;
+    public static int TILL_LENGTH = 7;
     public static int MAXIMUM_LOOK_TIMES = 5;
     public static int MAXIMUM_PEOPLE_CAN_WAIT = 5;
     public static List<CheckoutTill> CHECKOUT_TILL_LIST = new ArrayList<CheckoutTill>();
-
+    public static List<Consumer> consumerList = new ArrayList<>();
 
     public static void main(String[] args) throws InterruptedException {
         //Create checkout till
@@ -27,13 +27,22 @@ public class Supermarket {
 
         //Create producer and consumer
         Producer producer = new Producer();
-        Consumer consumer = new Consumer();
+        producer.setName("Producer 0");
 
-        //Start producer and consumer
+        for (int i = 0; i < NUMBER_OF_CHECKOUT_TILL; i++) {
+            Consumer consumer = new Consumer(i);
+            consumerList.add(consumer);
+        }
+
+        //Start producer
         producer.start();
-        consumer.start();
 
-//        consumer.join();
+        //Start consumer
+        for (int i = 0; i < NUMBER_OF_CHECKOUT_TILL; i++) {
+            Consumer consumer = consumerList.get(i);
+            consumer.setName("Consumer " + i);
+            consumer.start();
+        }
     }
 
     public static void createTIll(){

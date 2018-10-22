@@ -65,28 +65,26 @@ public class Customer {
 //                }
 //            }
         }
+
+        //Leave if looktimes is exceeded
         if(lookTimes == Supermarket.MAXIMUM_LOOK_TIMES && !enteredQueue) {
             leaveSupermarket();
         }
     }
 
-    //after enter, must go out
+    /**
+     * try to enter the queue if the queue
+     * @return true if sucessfully entered queue
+     * @throws InterruptedException
+     */
     public boolean tryEnterQueue() throws InterruptedException {
-//        for (int i = 0; i < CHECKOUT_TILL_LIST.size() && enteredQueue == false; i++) {
-//                boolean tillStatus = CHECKOUT_TILL_LIST.get(i).isWorkingStatus();
-//                int currentNumberInTill = CHECKOUT_TILL_LIST.get(i).getCustomerQueueList().size();
-//                if(tillStatus == true &&  currentNumberInTill < maxPeopleCanWait){
-//                    CHECKOUT_TILL_LIST.get(i).getCustomerQueueList().add(this);
-//                    Thread.sleep(1000);
-//                    enteredQueue = true;
-//                    tryEnterQueue();
-//                    CHECKOUT_TILL_LIST.get(i).getCustomerQueueList().remove(this);
-//                    break;
-//                }
-//            }
+        boolean queueResult = false;
+        for (int i = 0; i < CHECKOUT_TILL_LIST.size() && enteredQueue == false; i++) {
+            queueResult = CHECKOUT_TILL_LIST.get(i).enqueue(this, maxPeopleCanWait);
+            if(queueResult) return true;
+        }
 
-
-        boolean queueResult = CHECKOUT_TILL_LIST.get(0).enqueue(this, maxPeopleCanWait);
+//        queueResult = CHECKOUT_TILL_LIST.get(0).enqueue(this, maxPeopleCanWait);
         return queueResult;
     }
 

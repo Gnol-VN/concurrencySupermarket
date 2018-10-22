@@ -7,7 +7,11 @@ import application.model.CheckoutTill;
  * Created by Long laptop on 10/9/2018.
  */
 public class Consumer extends Thread {
-    private CheckoutTill checkoutTill = Supermarket.CHECKOUT_TILL_LIST.get(0);
+    private CheckoutTill checkoutTill ;
+
+    public Consumer(int tillIndex) {
+        checkoutTill = Supermarket.CHECKOUT_TILL_LIST.get(tillIndex);
+    }
 
     /**
      * Sleep 500ms to make sure the Consumer starts after Producer
@@ -15,7 +19,7 @@ public class Consumer extends Thread {
      */
     public void run(){
         try {
-            Thread.sleep(500);
+            Thread.sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
