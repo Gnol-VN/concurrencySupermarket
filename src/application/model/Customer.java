@@ -48,7 +48,7 @@ public class Customer {
             lookTimes ++;
             if(lookTimes >3 ){
                 Thread.sleep(100);
-                System.out.println(this.customerId+ " look again for "+ lookTimes);
+                System.out.println(this.customerId+ " look again for "+ lookTimes + "times");
             }
             enteredQueue = tryEnterQueue();
             //Look for a suitable queue
