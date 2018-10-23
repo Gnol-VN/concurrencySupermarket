@@ -31,15 +31,29 @@ import java.util.List;
  */
 public class Supermarket extends Application {
     //Constant
-    public static int NUMBER_OF_CHECKOUT_TILL = 4;
-    public static int NUMBER_OF_CUSTOMER = 25;
-    public static int TILL_LENGTH = 7;
+    public static int NUMBER_OF_CHECKOUT_TILL = 2;
+    public static int NUMBER_OF_CUSTOMER = 10;
+    public static int TILL_LENGTH = 5;
     public static int MAXIMUM_LOOK_TIMES = 5;
     public static int MAXIMUM_PEOPLE_CAN_WAIT = 5;
+
+//    public static int NUMBER_OF_CHECKOUT_TILL = 4;
+//    public static int NUMBER_OF_CUSTOMER = 25;
+//    public static int TILL_LENGTH = 7;
+//    public static int MAXIMUM_LOOK_TIMES = 5;
+//    public static int MAXIMUM_PEOPLE_CAN_WAIT = 5;
+//
+//
     public static List<CheckoutTill> CHECKOUT_TILL_LIST = new ArrayList<CheckoutTill>();
     public static List<Consumer> consumerList = new ArrayList<>();
+    public static GridPane groupRoot = new GridPane();
 
     public static void main(String[] args)  throws InterruptedException {
+        launch(args);
+    }
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
         //Create checkout till
         createTIll();
 
@@ -61,7 +75,8 @@ public class Supermarket extends Application {
             consumer.setName("Consumer " + i);
             consumer.start();
         }
-        launch(args);
+        prepareUI(primaryStage);
+
     }
 
     public static void createTIll(){
@@ -72,9 +87,7 @@ public class Supermarket extends Application {
         }
     }
 
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        GridPane groupRoot = new GridPane();
+    public static void prepareUI(Stage primaryStage){
         groupRoot.setVgap(8);
         groupRoot.setHgap(8);
         groupRoot.setPadding(new Insets(5));
@@ -141,8 +154,8 @@ public class Supermarket extends Application {
 
 //        groupRoot.getChildren().add(rectangle);
 //        groupRoot.getChildren().add(textField);
-        Scene scene = new Scene(groupRoot, 600,300);
-        primaryStage.setTitle("Sameple Long");
+        Scene scene = new Scene(groupRoot, 1024,768);
+        primaryStage.setTitle("Sample Long");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
