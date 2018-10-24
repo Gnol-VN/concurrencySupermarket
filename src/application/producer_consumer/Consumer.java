@@ -14,18 +14,18 @@ public class Consumer extends Thread {
     }
 
     /**
-     * Sleep 2000ms to make sure the Consumer starts after Producer
+     * Sleep 500ms to make sure the Consumer starts after Producer
      * Sleep 700ms to stimulate the checking time
      */
     public void run(){
         try {
-            Thread.sleep(2000);
+            Thread.sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         while(!checkoutTill.getCustomerQueueList().isEmpty()){
             try {
-                Thread.sleep(1000);
+                Thread.sleep(700);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
