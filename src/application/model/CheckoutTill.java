@@ -31,7 +31,7 @@ public class CheckoutTill {
         System.out.println("Added checkout till with checkoutId: " + checkoutId);
         StackPane stackPane = new StackPane();
         Label label = new Label("Till "+idCount);
-        Rectangle rectangle = new Rectangle(80,80);
+        Rectangle rectangle = new Rectangle(80,50);
         rectangle.setFill(Color.WHITE);
         stackPane.getChildren().addAll(rectangle,label);
         stackPane.setAccessibleText("Till "+idCount);
@@ -58,7 +58,7 @@ public class CheckoutTill {
             //Begin UI change
             StackPane stackPane = new StackPane();
             Label label = new Label("Customer: "+ customer.getCustomerId());
-            Rectangle rectangle = new Rectangle(80,80);
+            Rectangle rectangle = new Rectangle(80,50);
             rectangle.setFill(Color.ORANGE);
             stackPane.getChildren().addAll(rectangle,label);
             stackPane.setAccessibleText("Customer: "+ customer.getCustomerId());

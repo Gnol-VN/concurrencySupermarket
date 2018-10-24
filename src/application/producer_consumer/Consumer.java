@@ -1,5 +1,6 @@
 package application.producer_consumer;
 
+import application.ANSIColor;
 import application.Supermarket;
 import application.model.CheckoutTill;
 
@@ -19,7 +20,7 @@ public class Consumer extends Thread {
      */
     public void run(){
         try {
-            Thread.sleep(3000);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -36,5 +37,6 @@ public class Consumer extends Thread {
             }
 
         }
+        System.out.println(ANSIColor.ANSI_YELLOW+Thread.currentThread().getName()+"finish"+ANSIColor.ANSI_RESET);
     }
 }
