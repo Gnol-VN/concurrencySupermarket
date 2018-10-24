@@ -2,6 +2,10 @@ package application.model;
 
 import application.ANSIColor;
 import application.Supermarket;
+import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +26,7 @@ public class Customer {
     private int maxPeopleCanWait; //The number which this customer can wait
     private boolean enteredQueue =false;
     private int lookTimes;
+    private StackPane stackPane;
 
     /**
      * Create a customer with random product list and random maximum people he can wait in a queue
@@ -38,6 +43,16 @@ public class Customer {
         }
 //        maxPeopleCanWait = rand.nextInt(3) + 1;
         maxPeopleCanWait = Supermarket.MAXIMUM_PEOPLE_CAN_WAIT;
+
+        //Begin create UI
+        StackPane stackPane = new StackPane();
+        Label label = new Label("Customer: "+ customerId);
+        Rectangle rectangle = new Rectangle(80,50);
+        rectangle.setFill(Color.ORANGE);
+        stackPane.getChildren().addAll(rectangle,label);
+        stackPane.setAccessibleText("Customer: "+ customerId);
+        this.setStackPane(stackPane);
+        //End UI
     }
 
 
@@ -100,9 +115,16 @@ public class Customer {
 
 
 
+//Getter & Setter
 
-    //Getter & Setter
 
+    public StackPane getStackPane() {
+        return stackPane;
+    }
+
+    public void setStackPane(StackPane stackPane) {
+        this.stackPane = stackPane;
+    }
     public int getMaxPeopleCanWait() {
         return maxPeopleCanWait;
     }

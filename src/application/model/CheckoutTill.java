@@ -56,16 +56,11 @@ public class CheckoutTill {
             System.out.println(ANSIColor.ANSI_GREEN+ "---------->"+customer.getCustomerId()
                     + " entered till "+ this.getCheckoutId() + ANSIColor.ANSI_RESET );
             //Begin UI change
-            StackPane stackPane = new StackPane();
-            Label label = new Label("Customer: "+ customer.getCustomerId());
-            Rectangle rectangle = new Rectangle(80,50);
-            rectangle.setFill(Color.ORANGE);
-            stackPane.getChildren().addAll(rectangle,label);
-            stackPane.setAccessibleText("Customer: "+ customer.getCustomerId());
+
             Platform.runLater(new MyRunnable(this){
                 @Override
                 public void run() {
-                    Supermarket.groupRoot.add(stackPane,this.getCheckoutTill().customerQueueList.size(),this.getCheckoutTill().checkoutId);
+                    Supermarket.groupRoot.add(customer.getStackPane(),this.getCheckoutTill().customerQueueList.size(),this.getCheckoutTill().checkoutId);
                 }
             });
             //End UI change
@@ -83,14 +78,15 @@ public class CheckoutTill {
      * @throws InterruptedException
      */
     public synchronized void dequeue() throws InterruptedException {
-            while (customerQueueList.isEmpty()){ //if empty, wait for something to kick out
-                System.out.println("Called wait in dequeue method");
-                try {
-                    wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+        while (customerQueueList.isEmpty()){ //if empty, wait for something to kick out
+            System.out.println("Called wait in dequeue method");
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
+        }
+        Customer customer = customerQueueList.get(0);
         int customerToBeRemoved = customerQueueList.get(0).getCustomerId();
         //Begin UI change
         String nameOfCustomerToBeRemoved = "Customer: "+customerToBeRemoved;
@@ -107,7 +103,8 @@ public class CheckoutTill {
         Platform.runLater(new MyRunnable(this){
             @Override
             public void run() {
-                Supermarket.groupRoot.getChildren().remove(finalStackPane);
+                Supermarket.groupRoot.getChildren().remove(customer.getStackPane());
+//                Supermarket.groupRoot.getChildren().remove(finalStackPane);
             }
         });
         customerQueueList.remove(0);
