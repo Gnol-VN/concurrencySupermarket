@@ -16,6 +16,7 @@ public class Customer {
 
 
     private int customerId;
+    private static int idCount;
     private List<Product> productList;
     private int waitTime;
     private int maxPeopleCanWait; //The number which this customer can wait
@@ -27,8 +28,9 @@ public class Customer {
      */
     public Customer() {
         productList = new ArrayList<Product>();
-        customerId= (int )(Math. random() * 1000 + 1);
-
+        idCount++;
+//        customerId= (int )(Math. random() * 1000 + 1);
+        customerId = idCount;
         Random rand = new Random();
         int  n = rand.nextInt(10) + 2;
         for (int i = 0; i < n; i++) {
