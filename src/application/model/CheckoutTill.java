@@ -3,6 +3,11 @@ package application.model;
 
 import application.ANSIColor;
 import application.Supermarket;
+import javafx.application.Platform;
+import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +29,13 @@ public class CheckoutTill {
         checkoutId = idCount;
         customerQueueList = new ArrayList<>();
         System.out.println("Added checkout till with checkoutId: " + checkoutId);
+        StackPane stackPane = new StackPane();
+        Label label = new Label("Till "+idCount);
+        Rectangle rectangle = new Rectangle(80,80);
+        rectangle.setFill(Color.WHITE);
+        stackPane.getChildren().addAll(rectangle,label);
+        stackPane.setAccessibleText("Till "+idCount);
+        Supermarket.groupRoot.add(stackPane,0, idCount);
     }
 
     /**
@@ -36,15 +48,29 @@ public class CheckoutTill {
      */
     public synchronized boolean enqueue(Customer customer, int maxNumberCanWait) throws InterruptedException {
         if(workingStatus == true && customerQueueList.size() < maxNumberCanWait){
-                while(customerQueueList.size() >= Supermarket.TILL_LENGTH ){ // if till is full, so wait to put in
-                    System.out.println("Called wait in enqueue method");
-                    wait();
+            while(customerQueueList.size() >= Supermarket.TILL_LENGTH ){ // if till is full, so wait to put in
+                System.out.println("Called wait in enqueue method");
+                wait();
+            }
+            customerQueueList.add(customer);
+            System.out.println(ANSIColor.ANSI_GREEN+ "---------->"+customer.getCustomerId()
+                    + " entered till "+ this.getCheckoutId() + ANSIColor.ANSI_RESET );
+            //Begin UI change
+            StackPane stackPane = new StackPane();
+            Label label = new Label("Customer: "+ customer.getCustomerId());
+            Rectangle rectangle = new Rectangle(80,80);
+            rectangle.setFill(Color.ORANGE);
+            stackPane.getChildren().addAll(rectangle,label);
+            stackPane.setAccessibleText("Customer: "+ customer.getCustomerId());
+            Platform.runLater(new MyRunnable(this){
+                @Override
+                public void run() {
+                    Supermarket.groupRoot.add(stackPane,this.getCheckoutTill().customerQueueList.size(),this.getCheckoutTill().checkoutId);
                 }
-                customerQueueList.add(customer);
-                System.out.println(ANSIColor.ANSI_GREEN+ "---------->"+customer.getCustomerId()
-                        + " entered till "+ this.getCheckoutId() + ANSIColor.ANSI_RESET );
-                notifyAll();
-                return true;
+            });
+            //End UI change
+            notifyAll();
+            return true;
         }
 
         return false;
@@ -66,6 +92,24 @@ public class CheckoutTill {
                 }
             }
         int customerToBeRemoved = customerQueueList.get(0).getCustomerId();
+        //Begin UI change
+        String nameOfCustomerToBeRemoved = "Customer: "+customerToBeRemoved;
+        StackPane stackPane = new StackPane();
+        for (int i = 0; i < Supermarket.groupRoot.getChildren().size(); i++) {
+            if(Supermarket.groupRoot.getChildren().get(i).getAccessibleText() != null){
+
+                if(Supermarket.groupRoot.getChildren().get(i).getAccessibleText().equals(nameOfCustomerToBeRemoved)){
+                    stackPane = (StackPane) Supermarket.groupRoot.getChildren().get(i);
+                }
+            }
+        }
+        StackPane finalStackPane = stackPane;
+        Platform.runLater(new MyRunnable(this){
+            @Override
+            public void run() {
+                Supermarket.groupRoot.getChildren().remove(finalStackPane);
+            }
+        });
         customerQueueList.remove(0);
         System.out.println(ANSIColor.ANSI_BLACK + customerToBeRemoved
                 + " finished at till "+ this.getCheckoutId()+ ANSIColor.ANSI_RESET );

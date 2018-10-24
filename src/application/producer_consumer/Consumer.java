@@ -25,7 +25,7 @@ public class Consumer extends Thread {
         }
         while(!checkoutTill.getCustomerQueueList().isEmpty()){
             try {
-                Thread.sleep(700);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
