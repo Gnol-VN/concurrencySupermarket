@@ -16,7 +16,7 @@ public class Producer extends Thread {
     public void run(){
         for (int i = 0; i < Supermarket.NUMBER_OF_CUSTOMER; i++) {
             try {
-                Thread.sleep(100);
+                Thread.sleep(200);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
