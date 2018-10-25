@@ -1,6 +1,7 @@
 package application;
 
 import application.model.CheckoutTill;
+import application.model.Customer;
 import application.model.Scanner;
 import application.producer_consumer.Consumer;
 import application.producer_consumer.Producer;
@@ -47,6 +48,9 @@ public class Supermarket extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        //Prepare UI
+        prepareUI(primaryStage);
+
         //Create checkout till
         createTIll();
 
@@ -68,7 +72,6 @@ public class Supermarket extends Application {
             consumer.setName("Consumer " + i);
             consumer.start();
         }
-        prepareUI(primaryStage);
 
     }
 
@@ -112,14 +115,14 @@ public class Supermarket extends Application {
 
         flowPane.setPadding(new Insets(5));
 
-        for (int i=1; i<=20; i++) {
-            flowPane.getChildren().add(new Button(String.valueOf(i)));
-        }
+//        for (int i=1; i<=20; i++) {
+//            flowPane.getChildren().add(new Button(String.valueOf(i)));
+//        }
         //columnindex: 6th column, colspan: add 4 cols more
         groupRoot.add(flowPane,6,8,4,1);
 
 
-        Scene scene = new Scene(groupRoot, 1200,768);
+        Scene scene = new Scene(groupRoot, 1024,768);
         primaryStage.setTitle("Sample Long");
         primaryStage.setScene(scene);
         primaryStage.show();

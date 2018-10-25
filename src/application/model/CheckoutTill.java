@@ -60,7 +60,10 @@ public class CheckoutTill {
             Platform.runLater(new MyRunnable(this){
                 @Override
                 public void run() {
-                    Supermarket.groupRoot.add(customer.getStackPane(),this.getCheckoutTill().customerQueueList.size(),this.getCheckoutTill().checkoutId);
+                    StackPane customerIcon = customer.getStackPane();
+                    int col = this.getCheckoutTill().checkoutId;
+                    int row =this.getCheckoutTill().customerQueueList.size();
+                    Supermarket.groupRoot.add(customerIcon,row,col);
                 }
             });
             //End UI change

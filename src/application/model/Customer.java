@@ -2,6 +2,8 @@ package application.model;
 
 import application.ANSIColor;
 import application.Supermarket;
+import javafx.application.Platform;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -12,6 +14,7 @@ import java.util.List;
 import java.util.Random;
 
 import static application.Supermarket.CHECKOUT_TILL_LIST;
+import static application.Supermarket.flowPane;
 
 /**
  * Created by Long laptop on 9/24/2018.
@@ -61,6 +64,13 @@ public class Customer {
      * Customers will leave supermarket if they can not find a suitable queue for [lookTimes]
      */
     public void look() throws InterruptedException {
+        Platform.runLater(new MyRunnable(this){
+            @Override
+            public void run() {
+                flowPane.getChildren().add(this.getCustomer().getStackPane());
+            }
+        });
+
         while(enteredQueue == false && lookTimes < Supermarket.MAXIMUM_LOOK_TIMES){
             lookTimes ++;
             if(lookTimes >3 ){
