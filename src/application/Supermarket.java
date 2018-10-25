@@ -23,20 +23,22 @@ import java.util.List;
  * Created by Long laptop on 9/23/2018.
  */
 public class Supermarket extends Application {
-    //Constant
-//    public static int NUMBER_OF_CHECKOUT_TILL = 2;
-//    public static int NUMBER_OF_CUSTOMER = 10;
-//    public static int TILL_LENGTH = 5;
-//    public static int MAXIMUM_LOOK_TIMES = 5;
-//    public static int MAXIMUM_PEOPLE_CAN_WAIT = 5;
-
+    //CONSTANT
     public static int NUMBER_OF_CHECKOUT_TILL = 4;
     public static int NUMBER_OF_CUSTOMER = 25;
     public static int TILL_LENGTH = 7;
     public static int MAXIMUM_LOOK_TIMES = 5;
     public static int MAXIMUM_PEOPLE_CAN_WAIT = 5;
-//
-//
+
+    //Time
+        //For Customer object
+    public static int LOOK_AGAIN_TIME = 1500;
+    public static int FIRST_LOOK_TIME = 700;
+        //For Consumer and Producer objects
+    public static int ENTERING_TIME = 200;
+    public static int CONSUMER_START_AFTER_PRODUCER_TIME = 4000;
+    public static int CHECKING_TIME = 700;
+
     public static List<CheckoutTill> CHECKOUT_TILL_LIST = new ArrayList<CheckoutTill>();
     public static List<Consumer> consumerList = new ArrayList<>();
     public static GridPane groupRoot = new GridPane();
@@ -106,12 +108,12 @@ public class Supermarket extends Application {
         }
 
         StackPane shoppingAreaStackPane = new StackPane();
-        Label label = new Label("Shopping");
+        Label label = new Label("Waiting area");
         Rectangle rectangle = new Rectangle(80*5,50);
-        rectangle.setFill(Color.ORANGE);
+        rectangle.setFill(Color.GOLD);
         shoppingAreaStackPane.getChildren().addAll(rectangle,label);
-        shoppingAreaStackPane.setAccessibleText("Shopping area");
-        groupRoot.add(shoppingAreaStackPane,6,10);
+        shoppingAreaStackPane.setAccessibleText("Waiting area");
+        groupRoot.add(shoppingAreaStackPane,6,7);
 
         flowPane.setPadding(new Insets(5));
 
@@ -119,7 +121,7 @@ public class Supermarket extends Application {
 //            flowPane.getChildren().add(new Button(String.valueOf(i)));
 //        }
         //columnindex: 6th column, colspan: add 4 cols more
-        groupRoot.add(flowPane,6,8,4,1);
+        groupRoot.add(flowPane,6,10,4,1);
 
 
         Scene scene = new Scene(groupRoot, 1024,768);

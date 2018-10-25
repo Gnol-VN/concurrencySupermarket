@@ -2,25 +2,25 @@ package application.model;
 
 import application.ANSIColor;
 import application.Supermarket;
+import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static application.Supermarket.CHECKOUT_TILL_LIST;
-import static application.Supermarket.flowPane;
+import static application.Supermarket.*;
 
 /**
  * Created by Long laptop on 9/24/2018.
  */
-public class Customer {
-
+public class Customer extends Thread {
 
     private int customerId;
     private static int idCount;
@@ -58,23 +58,35 @@ public class Customer {
         //End UI
     }
 
+    @Override
+    public void run(){
+        try {
+            if(Thread.currentThread().isAlive())
+            System.out.println("Thread Customer: "+customerId+" runs");
+            look();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * Look for a suitable till to queue. A Suitable queue is OPEN-status, less than a maximum number of people.
      * Customers will leave supermarket if they can not find a suitable queue for [lookTimes]
      */
     public void look() throws InterruptedException {
+        //Begin UI: stay at Waiting line
         Platform.runLater(new MyRunnable(this){
             @Override
             public void run() {
                 flowPane.getChildren().add(this.getCustomer().getStackPane());
             }
         });
-
-        while(enteredQueue == false && lookTimes < Supermarket.MAXIMUM_LOOK_TIMES){
+        Thread.sleep(FIRST_LOOK_TIME); //First look time
+        //End UI
+        while(enteredQueue == false && lookTimes < MAXIMUM_LOOK_TIMES){
             lookTimes ++;
             if(lookTimes >3 ){
-                Thread.sleep(100);
+                Thread.sleep(Supermarket.LOOK_AGAIN_TIME);
                 System.out.println(this.customerId+ " look again for "+ lookTimes + "times");
             }
             enteredQueue = tryEnterQueue();
@@ -121,6 +133,12 @@ public class Customer {
     public void leaveSupermarket(){
         System.out.println(ANSIColor.ANSI_RED+ this.customerId+" left supermarket"
                 + " due to long waiting" + ANSIColor.ANSI_RESET);
+        TranslateTransition translateTransition = new TranslateTransition();
+        translateTransition.setByY(300);
+        translateTransition.setNode(this.getStackPane());
+        translateTransition.setDuration(Duration.millis(2000));
+        translateTransition.play();
+//
     }
 
 

@@ -3,6 +3,7 @@ package application.producer_consumer;
 import application.Supermarket;
 import application.model.CheckoutTill;
 import application.model.Customer;
+import static application.Supermarket.*;
 
 /**
  * Created by Long laptop on 10/9/2018.
@@ -16,17 +17,13 @@ public class Producer extends Thread {
     public void run(){
         for (int i = 0; i < Supermarket.NUMBER_OF_CUSTOMER; i++) {
             try {
-                Thread.sleep(200);
+                Thread.sleep(ENTERING_TIME);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            try {
 //              Create customer and make this customer look for a queue
-                Customer customer = new Customer();
-                customer.look();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            Customer customer = new Customer();
+            customer.start();
         }
     }
 

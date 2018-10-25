@@ -3,7 +3,7 @@ package application.producer_consumer;
 import application.ANSIColor;
 import application.Supermarket;
 import application.model.CheckoutTill;
-
+import static application.Supermarket.*;
 /**
  * Created by Long laptop on 10/9/2018.
  */
@@ -15,18 +15,18 @@ public class Consumer extends Thread {
     }
 
     /**
-     * Sleep 500ms to make sure the Consumer starts after Producer
+     * Sleep CONSUMER_START_AFTER_PRODUCER_TIMEms to make sure the Consumer starts after Producer
      * Sleep 700ms to stimulate the checking time
      */
     public void run(){
         try {
-            Thread.sleep(5000);
+            Thread.sleep(CONSUMER_START_AFTER_PRODUCER_TIME);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         while(!checkoutTill.getCustomerQueueList().isEmpty()){
             try {
-                Thread.sleep(700);
+                Thread.sleep(CHECKING_TIME);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
