@@ -1,5 +1,5 @@
 package application.model;
-
+import static application.Supermarket.*;
 import java.util.Random;
 
 /**
@@ -11,8 +11,7 @@ public class Product {
     private int checkoutProcessingTime;
 
     public Product() {
-        Random rand = new Random();
-        checkoutProcessingTime = rand.nextInt(3000) + 500;
+        checkoutProcessingTime = RANDOM.nextInt(3000) + 500;
     }
 
     public int getProductId() {

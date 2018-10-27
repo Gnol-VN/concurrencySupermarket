@@ -2,6 +2,7 @@ package application.model;
 
 import application.ANSIColor;
 import application.Supermarket;
+import application.producer_consumer.Consumer;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.scene.control.Button;
@@ -11,9 +12,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import static application.Supermarket.*;
 
@@ -25,7 +24,6 @@ public class Customer extends Thread {
     private int customerId;
     private static int idCount;
     private List<Product> productList;
-    private int waitTime;
     private int maxPeopleCanWait; //The number which this customer can wait
     private boolean enteredQueue =false;
     private int lookTimes;
@@ -39,8 +37,7 @@ public class Customer extends Thread {
         idCount++;
 //        customerId= (int )(Math. random() * 1000 + 1);
         customerId = idCount;
-        Random rand = new Random();
-        int  n = rand.nextInt(10) + 2;
+        int  n = RANDOM.nextInt(10) + 2;
         for (int i = 0; i < n; i++) {
             productList.add(new Product());
         }
@@ -61,8 +58,6 @@ public class Customer extends Thread {
     @Override
     public void run(){
         try {
-            if(Thread.currentThread().isAlive())
-            System.out.println("Thread Customer: "+customerId+" runs");
             look();
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -118,12 +113,21 @@ public class Customer extends Thread {
      */
     public boolean tryEnterQueue() throws InterruptedException {
         boolean queueResult = false;
-        for (int i = 0; i < CHECKOUT_TILL_LIST.size() && enteredQueue == false; i++) {
-            queueResult = CHECKOUT_TILL_LIST.get(i).enqueue(this, maxPeopleCanWait);
-            if(queueResult) return true;
+//        for (int i = 0; i < CHECKOUT_TILL_LIST.size() && enteredQueue == false; i++) {
+//            queueResult = CHECKOUT_TILL_LIST.get(i).enqueue(this, maxPeopleCanWait);
+//            if(queueResult) return true;
+//        }
+
+        if(enteredQueue== false){
+            List<Integer> numOfQueuingList = new ArrayList<>();
+            for (CheckoutTill  checkoutTill: CHECKOUT_TILL_LIST) {
+                int sizeOfThisQueue = checkoutTill.getCustomerQueueList().size();
+                numOfQueuingList.add(sizeOfThisQueue);
+            }
+            queueResult = CHECKOUT_TILL_LIST.get(numOfQueuingList.indexOf(Collections.min(numOfQueuingList))).enqueue(this, maxPeopleCanWait);
+
         }
 
-//        queueResult = CHECKOUT_TILL_LIST.get(0).enqueue(this, maxPeopleCanWait);
         return queueResult;
     }
 
@@ -134,7 +138,7 @@ public class Customer extends Thread {
         System.out.println(ANSIColor.ANSI_RED+ this.customerId+" left supermarket"
                 + " due to long waiting" + ANSIColor.ANSI_RESET);
         TranslateTransition translateTransition = new TranslateTransition();
-        translateTransition.setByY(300);
+        translateTransition.setByY(800);
         translateTransition.setNode(this.getStackPane());
         translateTransition.setDuration(Duration.millis(2000));
         translateTransition.play();
@@ -192,14 +196,6 @@ public class Customer extends Thread {
 
     public void setProductList(List<Product> productList) {
         this.productList = productList;
-    }
-
-    public int getWaitTime() {
-        return waitTime;
-    }
-
-    public void setWaitTime(int waitTime) {
-        this.waitTime = waitTime;
     }
 
 

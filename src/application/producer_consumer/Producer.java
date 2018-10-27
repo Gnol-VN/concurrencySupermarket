@@ -1,7 +1,5 @@
 package application.producer_consumer;
 
-import application.Supermarket;
-import application.model.CheckoutTill;
 import application.model.Customer;
 import static application.Supermarket.*;
 
@@ -15,9 +13,11 @@ public class Producer extends Thread {
      * Create customer and make this customer look for a queue
      */
     public void run(){
-        for (int i = 0; i < Supermarket.NUMBER_OF_CUSTOMER; i++) {
+//        for (int i = 0; i < Supermarket.NUMBER_OF_CUSTOMER; i++) {
+        this.setPriority(1);
+        while (true){
             try {
-                Thread.sleep(ENTERING_TIME);
+                Thread.sleep(SPAWN_TIME);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

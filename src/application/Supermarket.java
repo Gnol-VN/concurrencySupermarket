@@ -18,26 +18,33 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by Long laptop on 9/23/2018.
  */
 public class Supermarket extends Application {
     //CONSTANT
-    public static int NUMBER_OF_CHECKOUT_TILL = 4;
-    public static int NUMBER_OF_CUSTOMER = 25;
+    public static int NUMBER_OF_CHECKOUT_TILL = 6;
+//    public static int NUMBER_OF_CUSTOMER = 1000;
     public static int TILL_LENGTH = 7;
     public static int MAXIMUM_LOOK_TIMES = 5;
-    public static int MAXIMUM_PEOPLE_CAN_WAIT = 5;
+    public static int MAXIMUM_PEOPLE_CAN_WAIT = 7;
+    public static Random RANDOM = new Random();
+
 
     //Time
         //For Customer object
     public static int LOOK_AGAIN_TIME = 1500;
-    public static int FIRST_LOOK_TIME = 700;
+    public static int FIRST_LOOK_TIME = 1000;
         //For Consumer and Producer objects
-    public static int ENTERING_TIME = 200;
+    public static int SPAWN_TIME = 200;
     public static int CONSUMER_START_AFTER_PRODUCER_TIME = 4000;
-    public static int CHECKING_TIME = 700;
+
+    //Metrics
+    public static int AVG_SPAWN_RATE_PER_SECOND = 0;
+    public static int AVG_CHECK_PER_SECOND = 0;
+    public static int SPAWN_CHECK_RATE = 0;
 
     public static List<CheckoutTill> CHECKOUT_TILL_LIST = new ArrayList<CheckoutTill>();
     public static List<Consumer> consumerList = new ArrayList<>();

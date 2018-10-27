@@ -11,6 +11,9 @@ import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+
+import static application.Supermarket.RANDOM;
 
 /**
  * Created by Long laptop on 9/24/2018.
@@ -35,7 +38,16 @@ public class CheckoutTill {
         rectangle.setFill(Color.WHITE);
         stackPane.getChildren().addAll(rectangle,label);
         stackPane.setAccessibleText("Till "+idCount);
-        Supermarket.groupRoot.add(stackPane,0, idCount);
+        //Begin UI change
+
+        Platform.runLater(new MyRunnable(this){
+            @Override
+            public void run() {
+                Supermarket.groupRoot.add(stackPane,0, getCheckoutId());
+
+            }
+        });
+        //End UI change
     }
 
     /**
@@ -80,45 +92,38 @@ public class CheckoutTill {
      * If there is no one, consumer keeps waiting for some one to remove
      * @throws InterruptedException
      */
-    public synchronized void dequeue() throws InterruptedException {
-        while (customerQueueList.isEmpty()){ //if empty, wait for something to kick out
-            System.out.println("Called wait in dequeue method");
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        Customer customer = customerQueueList.get(0);
-        int customerToBeRemoved = customerQueueList.get(0).getCustomerId();
-        //Begin UI change
-        String nameOfCustomerToBeRemoved = "Customer: "+customerToBeRemoved;
-        StackPane stackPane = new StackPane();
-        for (int i = 0; i < Supermarket.groupRoot.getChildren().size(); i++) {
-            if(Supermarket.groupRoot.getChildren().get(i).getAccessibleText() != null){
+    public void dequeue() throws InterruptedException {
+        Thread.sleep(RANDOM.nextInt(2000) + 1000);
+        synchronized (this){
 
-                if(Supermarket.groupRoot.getChildren().get(i).getAccessibleText().equals(nameOfCustomerToBeRemoved)){
-                    stackPane = (StackPane) Supermarket.groupRoot.getChildren().get(i);
+            while (customerQueueList.isEmpty()){ //if empty, wait for something to kick out
+                System.out.println("Called wait in dequeue method");
+                try {
+                    wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
-        }
-        StackPane finalStackPane = stackPane;
-        Platform.runLater(new MyRunnable(this){
-            @Override
-            public void run() {
-                Supermarket.groupRoot.getChildren().remove(customer.getStackPane());
+            Customer customer = customerQueueList.get(0);
+            int customerToBeRemoved = customerQueueList.get(0).getCustomerId();
+            //Begin UI change
+            Platform.runLater(new MyRunnable(this){
+                @Override
+                public void run() {
+                    Supermarket.groupRoot.getChildren().remove(customer.getStackPane());
 //                Supermarket.groupRoot.getChildren().remove(finalStackPane);
-            }
-        });
-        customerQueueList.remove(0);
-        System.out.println(ANSIColor.ANSI_BLACK + customerToBeRemoved
-                + " finished at till "+ this.getCheckoutId()+ ANSIColor.ANSI_RESET );
-        notifyAll();
+                }
+            });
+            //End UI change
+            customerQueueList.remove(0);
+            System.out.println(ANSIColor.ANSI_BLACK + customerToBeRemoved
+                    + " finished at till "+ this.getCheckoutId()+ ANSIColor.ANSI_RESET );
+            notifyAll();
+        }
 
     }
 
     //Getter & Setter
-
 
     public Scanner getScanner() {
         return scanner;

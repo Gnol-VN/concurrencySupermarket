@@ -12,6 +12,7 @@ public class Consumer extends Thread {
 
     public Consumer(int tillIndex) {
         checkoutTill = Supermarket.CHECKOUT_TILL_LIST.get(tillIndex);
+        this.setPriority(9);
     }
 
     /**
@@ -24,12 +25,8 @@ public class Consumer extends Thread {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        while(!checkoutTill.getCustomerQueueList().isEmpty()){
-            try {
-                Thread.sleep(CHECKING_TIME);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+//        while(!checkoutTill.getCustomerQueueList().isEmpty()){
+        while(true){
             try {
                 checkoutTill.dequeue();
             } catch (InterruptedException e) {
@@ -37,6 +34,6 @@ public class Consumer extends Thread {
             }
 
         }
-        System.out.println(ANSIColor.ANSI_YELLOW+Thread.currentThread().getName()+"finish"+ANSIColor.ANSI_RESET);
+//        System.out.println(ANSIColor.ANSI_YELLOW+Thread.currentThread().getName()+"finish"+ANSIColor.ANSI_RESET);
     }
 }
