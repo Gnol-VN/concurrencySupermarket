@@ -134,14 +134,25 @@ public class Customer extends Thread {
     /**
      * Customer leave supermarket if he/she can not find a suitable queue
      */
-    public void leaveSupermarket(){
+    public void leaveSupermarket() throws InterruptedException {
         System.out.println(ANSIColor.ANSI_RED+ this.customerId+" left supermarket"
                 + " due to long waiting" + ANSIColor.ANSI_RESET);
         TranslateTransition translateTransition = new TranslateTransition();
-        translateTransition.setByY(800);
+        translateTransition.setByX(800);
         translateTransition.setNode(this.getStackPane());
         translateTransition.setDuration(Duration.millis(2000));
         translateTransition.play();
+        //To ensure this node has 2s to move before delete in UI
+        Thread.sleep(2000);
+        //Begin deletion in UI
+        Platform.runLater(new MyRunnable(this){
+            @Override
+            public void run() {
+                Supermarket.groupRoot.getChildren().remove(this.getCustomer().getStackPane());
+                Supermarket.flowPane.getChildren().remove(this.getCustomer().getStackPane());
+            }
+        });
+        //End UI deletion
 //
     }
 

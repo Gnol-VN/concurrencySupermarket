@@ -12,7 +12,7 @@ public class Consumer extends Thread {
 
     public Consumer(int tillIndex) {
         checkoutTill = Supermarket.CHECKOUT_TILL_LIST.get(tillIndex);
-        this.setPriority(9);
+        this.setPriority(10);
     }
 
     /**

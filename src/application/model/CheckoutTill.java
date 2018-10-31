@@ -107,11 +107,11 @@ public class CheckoutTill {
             Customer customer = customerQueueList.get(0);
             int customerToBeRemoved = customerQueueList.get(0).getCustomerId();
             //Begin UI change
-            Platform.runLater(new MyRunnable(this){
+            Platform.runLater(new MyRunnable(customer){
                 @Override
                 public void run() {
-                    Supermarket.groupRoot.getChildren().remove(customer.getStackPane());
-//                Supermarket.groupRoot.getChildren().remove(finalStackPane);
+                    Supermarket.groupRoot.getChildren().remove(this.getCustomer().getStackPane());
+                    Supermarket.flowPane.getChildren().remove(this.getCustomer().getStackPane());
                 }
             });
             //End UI change

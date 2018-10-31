@@ -1,7 +1,6 @@
 package application;
 
 import application.model.CheckoutTill;
-import application.model.Customer;
 import application.model.Scanner;
 import application.producer_consumer.Consumer;
 import application.producer_consumer.Producer;
