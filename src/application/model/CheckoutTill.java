@@ -93,7 +93,6 @@ public class CheckoutTill {
      * @throws InterruptedException
      */
     public void dequeue() throws InterruptedException {
-        Thread.sleep(RANDOM.nextInt(2000) + 1000);
         synchronized (this){
 
             while (customerQueueList.isEmpty()){ //if empty, wait for something to kick out

@@ -27,6 +27,9 @@ public class Customer extends Thread {
     private int maxPeopleCanWait; //The number which this customer can wait
     private boolean enteredQueue =false;
     private int lookTimes;
+
+
+    private int totalCheckingTime;
     private StackPane stackPane;
 
     /**
@@ -37,9 +40,12 @@ public class Customer extends Thread {
         idCount++;
 //        customerId= (int )(Math. random() * 1000 + 1);
         customerId = idCount;
-        int  n = RANDOM.nextInt(10) + 2;
+        int  n = RANDOM.nextInt(8) + 2;
         for (int i = 0; i < n; i++) {
-            productList.add(new Product());
+            Product product = new Product();
+            productList.add(product);
+            totalCheckingTime = totalCheckingTime + product.getCheckoutProcessingTime();
+
         }
 //        maxPeopleCanWait = rand.nextInt(3) + 1;
         maxPeopleCanWait = Supermarket.MAXIMUM_PEOPLE_CAN_WAIT;
@@ -210,5 +216,12 @@ public class Customer extends Thread {
     }
 
 
+    public int getTotalCheckingTime() {
+        return totalCheckingTime;
+    }
+
+    public void setTotalCheckingTime(int totalCheckingTime) {
+        this.totalCheckingTime = totalCheckingTime;
+    }
 
 }

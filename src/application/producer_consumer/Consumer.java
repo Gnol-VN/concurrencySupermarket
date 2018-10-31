@@ -29,6 +29,9 @@ public class Consumer extends Thread {
         while(true){
             try {
                 checkoutTill.dequeue();
+                int checkingOutTime = checkoutTill.getCustomerQueueList().get(0).getTotalCheckingTime();
+                Thread.sleep(checkingOutTime);
+
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
