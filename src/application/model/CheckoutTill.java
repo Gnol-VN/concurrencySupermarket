@@ -11,9 +11,8 @@ import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
-import static application.Supermarket.RANDOM;
+import static application.Supermarket.*;
 
 /**
  * Created by Long laptop on 9/24/2018.
@@ -43,7 +42,7 @@ public class CheckoutTill {
         Platform.runLater(new MyRunnable(this){
             @Override
             public void run() {
-                Supermarket.groupRoot.add(stackPane,0, getCheckoutId());
+                Supermarket.GROUP_ROOT.add(stackPane,0, getCheckoutId());
 
             }
         });
@@ -51,9 +50,9 @@ public class CheckoutTill {
     }
 
     /**
-     * Add a customer in a queue if this till is working and customer can wait
-     * This is a producer pattern, which keep adding people to the queue
-     * If the queue is full, producer keeps waiting until there is a slot available
+     * Add a customer in a queue if this till is working and customer can wait.
+     * This is a producer pattern, which keep adding people to the queue.
+     * If the queue is full, producer keeps waiting until there is a slot available.
      * @param customer the customer trying to queue
      * @param maxNumberCanWait maximum number which this customer can wait
      * @return true if this customer has queued successfully
@@ -67,15 +66,16 @@ public class CheckoutTill {
             customerQueueList.add(customer);
             System.out.println(ANSIColor.ANSI_GREEN+ "---------->"+customer.getCustomerId()
                     + " entered till "+ this.getCheckoutId() + ANSIColor.ANSI_RESET );
-            //Begin UI change
 
+            //Begin UI change INCLUDING increasing LABEL_ENQUEUE_REQUESTED
             Platform.runLater(new MyRunnable(this){
                 @Override
                 public void run() {
+                    LABEL_ENQUEUE_REQUESTED.setText(String.valueOf(ENQUEUE_REQUESTED));
                     StackPane customerIcon = customer.getStackPane();
                     int col = this.getCheckoutTill().checkoutId;
                     int row =this.getCheckoutTill().customerQueueList.size();
-                    Supermarket.groupRoot.add(customerIcon,row,col);
+                    Supermarket.GROUP_ROOT.add(customerIcon,row,col);
                 }
             });
             //End UI change
@@ -105,12 +105,15 @@ public class CheckoutTill {
             }
             Customer customer = customerQueueList.get(0);
             int customerToBeRemoved = customerQueueList.get(0).getCustomerId();
+            DEQUEUE_SUCCESSED++;
+
             //Begin UI change
             Platform.runLater(new MyRunnable(customer){
                 @Override
                 public void run() {
-                    Supermarket.groupRoot.getChildren().remove(this.getCustomer().getStackPane());
-                    Supermarket.flowPane.getChildren().remove(this.getCustomer().getStackPane());
+                    LABEL_DEQUEUE_SUCCESSED.setText(String.valueOf(DEQUEUE_SUCCESSED));
+                    Supermarket.GROUP_ROOT.getChildren().remove(this.getCustomer().getStackPane());
+                    Supermarket.FLOW_PANE.getChildren().remove(this.getCustomer().getStackPane());
                 }
             });
             //End UI change

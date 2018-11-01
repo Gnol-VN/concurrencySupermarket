@@ -2,10 +2,8 @@ package application.model;
 
 import application.ANSIColor;
 import application.Supermarket;
-import application.producer_consumer.Consumer;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -79,7 +77,7 @@ public class Customer extends Thread {
         Platform.runLater(new MyRunnable(this){
             @Override
             public void run() {
-                flowPane.getChildren().add(this.getCustomer().getStackPane());
+                FLOW_PANE.getChildren().add(this.getCustomer().getStackPane());
             }
         });
         Thread.sleep(FIRST_LOOK_TIME); //First look time
@@ -154,8 +152,8 @@ public class Customer extends Thread {
         Platform.runLater(new MyRunnable(this){
             @Override
             public void run() {
-                Supermarket.groupRoot.getChildren().remove(this.getCustomer().getStackPane());
-                Supermarket.flowPane.getChildren().remove(this.getCustomer().getStackPane());
+                Supermarket.GROUP_ROOT.getChildren().remove(this.getCustomer().getStackPane());
+                Supermarket.FLOW_PANE.getChildren().remove(this.getCustomer().getStackPane());
             }
         });
         //End UI deletion
