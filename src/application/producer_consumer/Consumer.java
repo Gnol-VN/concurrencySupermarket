@@ -28,11 +28,11 @@ public class Consumer extends Thread {
 //        while(!checkoutTill.getCustomerQueueList().isEmpty()){
         while(true){
             try {
-                checkoutTill.dequeue();
-                int checkingOutTime = 100; //simulation
+                int checkingOutTime = 300; //simulation
                 if(checkoutTill.getCustomerQueueList().size() != 0){
                     checkingOutTime = checkoutTill.getCustomerQueueList().get(0).getTotalCheckingTime();
                 }
+                checkoutTill.dequeue();
                 Thread.sleep(checkingOutTime);
 
             } catch (Exception e) {

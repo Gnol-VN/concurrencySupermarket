@@ -25,6 +25,10 @@ public class CheckoutTill {
     private Scanner scanner;
     private List<Customer> customerQueueList;
 
+
+
+    private StackPane tillStackPane;
+
     public CheckoutTill(Scanner scanner) {
         this.scanner = scanner;
         idCount++;
@@ -34,9 +38,10 @@ public class CheckoutTill {
         StackPane stackPane = new StackPane();
         Label label = new Label("Till "+idCount);
         Rectangle rectangle = new Rectangle(80,50);
-        rectangle.setFill(Color.WHITE);
+        rectangle.setFill(Color.GREEN);
         stackPane.getChildren().addAll(rectangle,label);
         stackPane.setAccessibleText("Till "+idCount);
+        this.tillStackPane = stackPane;
         //Begin UI change
 
         Platform.runLater(new MyRunnable(this){
@@ -166,6 +171,12 @@ public class CheckoutTill {
     public void setLessThanFiveItems(boolean lessThanFiveItems) {
         this.lessThanFiveItems = lessThanFiveItems;
     }
+    public StackPane getTillStackPane() {
+        return tillStackPane;
+    }
 
+    public void setTillStackPane(StackPane tillStackPane) {
+        this.tillStackPane = tillStackPane;
+    }
 
 }

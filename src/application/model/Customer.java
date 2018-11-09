@@ -89,19 +89,6 @@ public class Customer extends Thread {
                 System.out.println(this.customerId+ " look again for "+ lookTimes + "times");
             }
             enteredQueue = tryEnterQueue();
-            //Look for a suitable queue
-//            for (int i = 0; i < CHECKOUT_TILL_LIST.size() && enteredQueue == false; i++) {
-//                boolean tillStatus = CHECKOUT_TILL_LIST.get(i).isWorkingStatus();
-//                int currentNumberInTill = CHECKOUT_TILL_LIST.get(i).getCustomerQueueList().size();
-//                if(tillStatus == true &&  currentNumberInTill < maxPeopleCanWait){
-//                    CHECKOUT_TILL_LIST.get(i).getCustomerQueueList().add(this);
-//                    Thread.sleep(1000);
-//                    enteredQueue = true;
-//                    tryEnterQueue();
-//                    CHECKOUT_TILL_LIST.get(i).getCustomerQueueList().remove(this);
-//                    break;
-//                }
-//            }
         }
 
         //Leave if looktimes is exceeded

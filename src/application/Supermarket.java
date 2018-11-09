@@ -2,6 +2,7 @@ package application;
 
 import application.model.CheckoutTill;
 import application.model.Scanner;
+import application.model.TillWatcher;
 import application.producer_consumer.Consumer;
 import application.producer_consumer.Producer;
 import javafx.application.Application;
@@ -36,13 +37,14 @@ public class Supermarket extends Application {
     public static int LOOK_AGAIN_TIME = 1500;
     public static int FIRST_LOOK_TIME = 1000;
         //For Consumer and Producer objects
-    public static int SPAWN_TIME = 220; //200-240
+    public static int SPAWN_TIME = 240; //200-240
     public static int CONSUMER_START_AFTER_PRODUCER_TIME = 4000;
 
     //Metrics
-    public static int ENQUEUE_REQUESTED = 0;
-    public static int DEQUEUE_SUCCESSED = 0;
-    public static int SPAWN_CHECK_RATE = 0;
+    public static double ENQUEUE_REQUESTED = 0;
+    public static double DEQUEUE_SUCCESSED = 0;
+    public static double TRADE_BALANCE = 0;
+
 
     public static List<CheckoutTill> CHECKOUT_TILL_LIST = new ArrayList<CheckoutTill>();
     public static List<Consumer> consumerList = new ArrayList<>();
@@ -50,6 +52,7 @@ public class Supermarket extends Application {
     //Common UI
     public static GridPane GROUP_ROOT = new GridPane();
     public static FlowPane FLOW_PANE = new FlowPane(Orientation.HORIZONTAL, 5, 5);
+    public static Label LABEL_SCALE = new Label(String.valueOf(TRADE_BALANCE));
     public static Label LABEL_ENQUEUE_REQUESTED = new Label(String.valueOf(ENQUEUE_REQUESTED));
     public static Label LABEL_DEQUEUE_SUCCESSED = new Label(String.valueOf(DEQUEUE_SUCCESSED));
 
@@ -64,6 +67,8 @@ public class Supermarket extends Application {
         //Create checkout till
         createTIll();
 
+        //Create Till Watcher
+        createTillWatcher();
         //Create producer and consumer
         Producer producer = new Producer();
         producer.setName("Producer 0");
@@ -82,6 +87,14 @@ public class Supermarket extends Application {
             consumer.setName("Consumer " + i);
             consumer.start();
         }
+
+    }
+
+    private void createTillWatcher() {
+        TillWatcher tillWatcher = new TillWatcher();
+        tillWatcher.setName("Till watcher");
+        tillWatcher.setPriority(10);
+        tillWatcher.start();
 
     }
 
@@ -125,6 +138,7 @@ public class Supermarket extends Application {
         //Add metrics nodes
         GROUP_ROOT.add(LABEL_ENQUEUE_REQUESTED,1,10,2,1);
         GROUP_ROOT.add(LABEL_DEQUEUE_SUCCESSED,1,11,2,1);
+        GROUP_ROOT.add(LABEL_SCALE,1,12,2,1);
 
         //Add FLOW_PANE node
         GROUP_ROOT.add(FLOW_PANE,6,10,4,1);
