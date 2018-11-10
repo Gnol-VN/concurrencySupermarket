@@ -30,7 +30,7 @@ public class Supermarket extends Application {
     public static int NUMBER_OF_CHECKOUT_TILL = 6;
 //    public static int NUMBER_OF_CUSTOMER = 1000;
     public static int TILL_LENGTH = 7;
-    public static int MAXIMUM_LOOK_TIMES = 10;
+    public static int MAXIMUM_LOOK_TIMES = 5;
     public static Random RANDOM = new Random();
 
 
