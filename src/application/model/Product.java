@@ -14,7 +14,7 @@ public class Product {
      * Create a product with random checkout processing time between 50 to 500 mini second
      */
     public Product() {
-        checkoutProcessingTime = RANDOM.nextInt(500) + 100;
+        checkoutProcessingTime = RANDOM.nextInt(1000) + 500;
     }
 
     public int getProductId() {

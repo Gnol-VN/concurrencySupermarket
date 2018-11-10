@@ -34,10 +34,10 @@ public class Supermarket extends Application {
 
     //Time
         //For Customer object
+    public static int FIRST_LOOK_TIME = 2000;
     public static int LOOK_AGAIN_TIME = 1500;
-    public static int FIRST_LOOK_TIME = 1000;
         //For Consumer and Producer objects
-    public static int SPAWN_TIME = 240; //200-240
+    public static int SPAWN_TIME = 1000; //200-240
     public static int CONSUMER_START_AFTER_PRODUCER_TIME = 4000;
 
     //Metrics
@@ -51,7 +51,7 @@ public class Supermarket extends Application {
 
     //Common UI
     public static GridPane GROUP_ROOT = new GridPane();
-    public static FlowPane FLOW_PANE = new FlowPane(Orientation.HORIZONTAL, 5, 5);
+    public static FlowPane WAITING_AREA_FLOWPANE = new FlowPane(Orientation.HORIZONTAL, 5, 5);
     public static Label LABEL_SCALE = new Label(String.valueOf(TRADE_BALANCE));
     public static Label LABEL_ENQUEUE_REQUESTED = new Label(String.valueOf(ENQUEUE_REQUESTED));
     public static Label LABEL_DEQUEUE_SUCCESSED = new Label(String.valueOf(DEQUEUE_SUCCESSED));
@@ -62,13 +62,16 @@ public class Supermarket extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        //Prepare UI
-        prepareUI(primaryStage);
         //Create checkout till
         createTIll();
 
+        //Prepare UI
+        prepareUI(primaryStage);
+
+
         //Create Till Watcher
         createTillWatcher();
+
         //Create producer and consumer
         Producer producer = new Producer();
         producer.setName("Producer 0");
@@ -84,7 +87,8 @@ public class Supermarket extends Application {
         //Start consumer
         for (int i = 0; i < NUMBER_OF_CHECKOUT_TILL; i++) {
             Consumer consumer = consumerList.get(i);
-            consumer.setName("Consumer " + i);
+            int consumerIndex = i+1;
+            consumer.setName("Consumer " + consumerIndex);
             consumer.start();
         }
 
@@ -140,9 +144,15 @@ public class Supermarket extends Application {
         GROUP_ROOT.add(LABEL_DEQUEUE_SUCCESSED,1,11,2,1);
         GROUP_ROOT.add(LABEL_SCALE,1,12,2,1);
 
-        //Add FLOW_PANE node
-        GROUP_ROOT.add(FLOW_PANE,6,10,4,1);
+        //Add WAITING_AREA_FLOWPANE node
+        GROUP_ROOT.add(WAITING_AREA_FLOWPANE,6,10,6,6);
 
+        //Add TILL FLOWPANE for each till
+        for (int i = 0; i < NUMBER_OF_CHECKOUT_TILL; i++) {
+            CheckoutTill checkoutTill = CHECKOUT_TILL_LIST.get(i);
+            GROUP_ROOT.add(checkoutTill.getTillFlowPane(),
+                    1, checkoutTill.getCheckoutId(),10,1 );
+        }
 
         Scene scene = new Scene(GROUP_ROOT, 1024,768);
         primaryStage.setTitle("Sample Long");

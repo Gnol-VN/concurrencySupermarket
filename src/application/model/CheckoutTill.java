@@ -4,7 +4,9 @@ package application.model;
 import application.ANSIColor;
 import application.Supermarket;
 import javafx.application.Platform;
+import javafx.geometry.Orientation;
 import javafx.scene.control.Label;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -24,10 +26,8 @@ public class CheckoutTill {
     private boolean lessThanFiveItems;
     private Scanner scanner;
     private List<Customer> customerQueueList;
-
-
-
     private StackPane tillStackPane;
+    private FlowPane tillFlowPane;
 
     public CheckoutTill(Scanner scanner) {
         this.scanner = scanner;
@@ -35,6 +35,8 @@ public class CheckoutTill {
         checkoutId = idCount;
         customerQueueList = new ArrayList<>();
         System.out.println("Added checkout till with checkoutId: " + checkoutId);
+
+        //Set UI
         StackPane stackPane = new StackPane();
         Label label = new Label("Till "+idCount);
         Rectangle rectangle = new Rectangle(80,50);
@@ -42,8 +44,9 @@ public class CheckoutTill {
         stackPane.getChildren().addAll(rectangle,label);
         stackPane.setAccessibleText("Till "+idCount);
         this.tillStackPane = stackPane;
-        //Begin UI change
 
+        tillFlowPane = new FlowPane(Orientation.HORIZONTAL, 5, 5);
+        //Begin UI change
         Platform.runLater(new MyRunnable(this){
             @Override
             public void run() {
@@ -73,15 +76,17 @@ public class CheckoutTill {
                     + " entered till "+ this.getCheckoutId() + ANSIColor.ANSI_RESET );
 
             //Begin UI change INCLUDING increasing LABEL_ENQUEUE_REQUESTED
+
             Platform.runLater(new MyRunnable(this){
                 @Override
                 public void run() {
                     LABEL_ENQUEUE_REQUESTED.setText(String.valueOf(ENQUEUE_REQUESTED));
                     StackPane customerIcon = customer.getStackPane();
-                    int col = this.getCheckoutTill().checkoutId;
-                    int row =this.getCheckoutTill().customerQueueList.size();
-                    Supermarket.GROUP_ROOT.add(customerIcon,row,col);
+                    this.getCheckoutTill().tillFlowPane.getChildren().add(customerIcon);
                 }
+
+
+
             });
             //End UI change
             notifyAll();
@@ -97,11 +102,10 @@ public class CheckoutTill {
      * If there is no one, consumer keeps waiting for some one to remove
      * @throws InterruptedException
      */
-    public void dequeue() throws InterruptedException {
-        synchronized (this){
+    public synchronized void dequeue() throws InterruptedException {
 
             while (customerQueueList.isEmpty()){ //if empty, wait for something to kick out
-                System.out.println("Called wait in dequeue method");
+//                System.out.println("Called wait in dequeue method");
                 try {
                     wait();
                 } catch (InterruptedException e) {
@@ -113,12 +117,13 @@ public class CheckoutTill {
             DEQUEUE_SUCCESSED++;
 
             //Begin UI change
-            Platform.runLater(new MyRunnable(customer){
+            Platform.runLater(new MyRunnable(this, customer){
                 @Override
                 public void run() {
                     LABEL_DEQUEUE_SUCCESSED.setText(String.valueOf(DEQUEUE_SUCCESSED));
                     Supermarket.GROUP_ROOT.getChildren().remove(this.getCustomer().getStackPane());
-                    Supermarket.FLOW_PANE.getChildren().remove(this.getCustomer().getStackPane());
+                    this.getCheckoutTill().tillFlowPane.getChildren().remove(customer.getStackPane());
+                    Supermarket.WAITING_AREA_FLOWPANE.getChildren().remove(this.getCustomer().getStackPane());
                 }
             });
             //End UI change
@@ -126,7 +131,6 @@ public class CheckoutTill {
             System.out.println(ANSIColor.ANSI_BLACK + customerToBeRemoved
                     + " finished at till "+ this.getCheckoutId()+ ANSIColor.ANSI_RESET );
             notifyAll();
-        }
 
     }
 
@@ -179,4 +183,19 @@ public class CheckoutTill {
         this.tillStackPane = tillStackPane;
     }
 
+    public static int getIdCount() {
+        return idCount;
+    }
+
+    public static void setIdCount(int idCount) {
+        CheckoutTill.idCount = idCount;
+    }
+
+    public FlowPane getTillFlowPane() {
+        return tillFlowPane;
+    }
+
+    public void setTillFlowPane(FlowPane tillFlowPane) {
+        this.tillFlowPane = tillFlowPane;
+    }
 }

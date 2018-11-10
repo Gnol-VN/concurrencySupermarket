@@ -77,7 +77,7 @@ public class Customer extends Thread {
         Platform.runLater(new MyRunnable(this){
             @Override
             public void run() {
-                FLOW_PANE.getChildren().add(this.getCustomer().getStackPane());
+                WAITING_AREA_FLOWPANE.getChildren().add(this.getCustomer().getStackPane());
             }
         });
         Thread.sleep(FIRST_LOOK_TIME); //First look time
@@ -140,7 +140,7 @@ public class Customer extends Thread {
             @Override
             public void run() {
                 Supermarket.GROUP_ROOT.getChildren().remove(this.getCustomer().getStackPane());
-                Supermarket.FLOW_PANE.getChildren().remove(this.getCustomer().getStackPane());
+                Supermarket.WAITING_AREA_FLOWPANE.getChildren().remove(this.getCustomer().getStackPane());
             }
         });
         //End UI deletion

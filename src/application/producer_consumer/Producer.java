@@ -24,7 +24,7 @@ public class Producer extends Thread {
 //              Create customer and make this customer look for a queue
             Customer customer = new Customer();
             ENQUEUE_REQUESTED++;
-
+            customer.setName(String.valueOf(customer.getCustomerId()));
             customer.start();
         }
     }
