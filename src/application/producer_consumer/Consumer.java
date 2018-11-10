@@ -34,7 +34,11 @@ public class Consumer extends Thread {
                 checkoutTill.dequeue();
 
             } catch (Exception e) {
-//                e.printStackTrace();
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
             }
 
         }

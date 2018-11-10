@@ -6,10 +6,13 @@ import application.model.TillWatcher;
 import application.producer_consumer.Consumer;
 import application.producer_consumer.Producer;
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -27,17 +30,16 @@ public class Supermarket extends Application {
     public static int NUMBER_OF_CHECKOUT_TILL = 6;
 //    public static int NUMBER_OF_CUSTOMER = 1000;
     public static int TILL_LENGTH = 7;
-    public static int MAXIMUM_LOOK_TIMES = 5;
-    public static int MAXIMUM_PEOPLE_CAN_WAIT = 7;
+    public static int MAXIMUM_LOOK_TIMES = 10;
     public static Random RANDOM = new Random();
 
 
     //Time
         //For Customer object
     public static int FIRST_LOOK_TIME = 2000;
-    public static int LOOK_AGAIN_TIME = 1500;
+    public static int LOOK_AGAIN_TIME = 1000;
         //For Consumer and Producer objects
-    public static int SPAWN_TIME = 1000; //200-240
+    public static int SPAWN_TIME = 600; //200-240
     public static int CONSUMER_START_AFTER_PRODUCER_TIME = 4000;
 
     //Metrics
@@ -53,6 +55,7 @@ public class Supermarket extends Application {
     public static GridPane GROUP_ROOT = new GridPane();
     public static FlowPane WAITING_AREA_FLOWPANE = new FlowPane(Orientation.HORIZONTAL, 5, 5);
     public static Label LABEL_SCALE = new Label(String.valueOf(TRADE_BALANCE));
+    public static Label LABEL_SPAWN_RATE = new Label(String.valueOf(SPAWN_TIME));
     public static Label LABEL_ENQUEUE_REQUESTED = new Label(String.valueOf(ENQUEUE_REQUESTED));
     public static Label LABEL_DEQUEUE_SUCCESSED = new Label(String.valueOf(DEQUEUE_SUCCESSED));
 
@@ -111,13 +114,11 @@ public class Supermarket extends Application {
     }
 
     public static void prepareUI(Stage primaryStage){
-//        GROUP_ROOT.setVgap(10);
         //Init the properties and constrains of GROUP_ROOT
         GROUP_ROOT.setHgap(80);
-//        Supermarket.GROUP_ROOT.setGridLinesVisible(true);
         GROUP_ROOT.setPadding(new Insets(5));
-        final int numCols = 12 ;
-        final int numRows = 12 ;
+        final int numCols = 15 ;
+        final int numRows = 15 ;
         for (int i = 0; i < numCols; i++) {
             ColumnConstraints colConst = new ColumnConstraints();
             colConst.setPrefWidth(10);
@@ -137,12 +138,35 @@ public class Supermarket extends Application {
         rectangle.setFill(Color.GOLD);
         shoppingAreaStackPane.getChildren().addAll(rectangle,label);
         shoppingAreaStackPane.setAccessibleText("Waiting area");
-        GROUP_ROOT.add(shoppingAreaStackPane,6,7);
+        GROUP_ROOT.add(shoppingAreaStackPane,6,8);
 
         //Add metrics nodes
         GROUP_ROOT.add(LABEL_ENQUEUE_REQUESTED,1,10,2,1);
         GROUP_ROOT.add(LABEL_DEQUEUE_SUCCESSED,1,11,2,1);
         GROUP_ROOT.add(LABEL_SCALE,1,12,2,1);
+        GROUP_ROOT.add(LABEL_SPAWN_RATE,1,13,2,1);
+
+        //Add spawn rate slider
+        Slider spawnSlider = new Slider();
+        spawnSlider.setMin(200);
+        spawnSlider.setMax(1000);
+        spawnSlider.setValue(600);
+        spawnSlider.setShowTickLabels(true);
+        spawnSlider.setShowTickMarks(true);
+        spawnSlider.setMinorTickCount(0);
+        spawnSlider.setMajorTickUnit(200);
+        spawnSlider.setBlockIncrement(100);
+        GROUP_ROOT.add(spawnSlider, 1,14, 6, 1);
+
+        spawnSlider.valueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, //
+                                Number oldValue, Number newValue) {
+                SPAWN_TIME = newValue.intValue();
+                LABEL_SPAWN_RATE.setText(String.valueOf(newValue));
+
+            }
+        });
 
         //Add WAITING_AREA_FLOWPANE node
         GROUP_ROOT.add(WAITING_AREA_FLOWPANE,6,10,6,6);

@@ -46,7 +46,7 @@ public class Customer extends Thread {
 
         }
 //        maxPeopleCanWait = rand.nextInt(3) + 1;
-        maxPeopleCanWait = Supermarket.MAXIMUM_PEOPLE_CAN_WAIT;
+        maxPeopleCanWait = RANDOM.nextInt(7) +3;
 
         //Begin create UI
         StackPane stackPane = new StackPane();
@@ -84,7 +84,7 @@ public class Customer extends Thread {
         //End UI
         while(enteredQueue == false && lookTimes < MAXIMUM_LOOK_TIMES){
             lookTimes ++;
-            if(lookTimes >3 ){
+            if(lookTimes > 3){
                 Thread.sleep(Supermarket.LOOK_AGAIN_TIME);
                 System.out.println(this.customerId+ " look again for "+ lookTimes + "times");
             }
@@ -104,18 +104,18 @@ public class Customer extends Thread {
      */
     public boolean tryEnterQueue() throws InterruptedException {
         boolean queueResult = false;
-//        for (int i = 0; i < CHECKOUT_TILL_LIST.size() && enteredQueue == false; i++) {
-//            queueResult = CHECKOUT_TILL_LIST.get(i).enqueue(this, maxPeopleCanWait);
-//            if(queueResult) return true;
-//        }
 
         if(enteredQueue== false){
             List<Integer> numOfQueuingList = new ArrayList<>();
             for (CheckoutTill  checkoutTill: CHECKOUT_TILL_LIST) {
-                int sizeOfThisQueue = checkoutTill.getCustomerQueueList().size();
-                numOfQueuingList.add(sizeOfThisQueue);
+                if(checkoutTill.isWorkingStatus()){
+                    int sizeOfThisQueue = checkoutTill.getCustomerQueueList().size();
+                    numOfQueuingList.add(sizeOfThisQueue);
+                }
             }
-            queueResult = CHECKOUT_TILL_LIST.get(numOfQueuingList.indexOf(Collections.min(numOfQueuingList))).enqueue(this, maxPeopleCanWait);
+            //enter a queue with a smallest number of customers
+            queueResult = CHECKOUT_TILL_LIST.get(numOfQueuingList.indexOf(Collections.min(numOfQueuingList)))
+                    .enqueue(this, maxPeopleCanWait);
 
         }
 
