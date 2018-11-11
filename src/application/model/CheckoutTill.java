@@ -39,6 +39,7 @@ public class CheckoutTill {
         //Set UI
         StackPane stackPane = new StackPane();
         Label label = new Label("Till "+idCount);
+        label.setTextFill(Color.WHITE);
         Rectangle rectangle = new Rectangle(80,50);
         rectangle.setFill(Color.GREEN);
         stackPane.getChildren().addAll(rectangle,label);

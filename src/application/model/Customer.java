@@ -126,6 +126,7 @@ public class Customer extends Thread {
      * Customer leave supermarket if he/she can not find a suitable queue
      */
     public void leaveSupermarket() throws InterruptedException {
+        LEFT_CUSTOMER_NUMBER++;
         System.out.println(ANSIColor.ANSI_RED+ this.customerId+" left supermarket"
                 + " due to long waiting" + ANSIColor.ANSI_RESET);
         TranslateTransition translateTransition = new TranslateTransition();
@@ -135,10 +136,12 @@ public class Customer extends Thread {
         translateTransition.play();
         //To ensure this node has 2s to move before delete in UI
         Thread.sleep(2000);
+
         //Begin deletion in UI
         Platform.runLater(new MyRunnable(this){
             @Override
             public void run() {
+                LABEL_LEFT_CUSTOMER.setText("Left customer: " + String.valueOf(LEFT_CUSTOMER_NUMBER));
                 Supermarket.GROUP_ROOT.getChildren().remove(this.getCustomer().getStackPane());
                 Supermarket.WAITING_AREA_FLOWPANE.getChildren().remove(this.getCustomer().getStackPane());
             }

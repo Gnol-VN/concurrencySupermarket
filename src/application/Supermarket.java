@@ -18,6 +18,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -29,8 +30,8 @@ public class Supermarket extends Application {
     //CONSTANT
     public static int NUMBER_OF_CHECKOUT_TILL = 6;
 //    public static int NUMBER_OF_CUSTOMER = 1000;
-    public static int TILL_LENGTH = 7;
-    public static int MAXIMUM_LOOK_TIMES = 5;
+    public static int TILL_LENGTH = 6;
+    public static int MAXIMUM_LOOK_TIMES = 6;
     public static Random RANDOM = new Random();
 
 
@@ -46,6 +47,7 @@ public class Supermarket extends Application {
     public static double ENQUEUE_REQUESTED = 0;
     public static double DEQUEUE_SUCCESSED = 0;
     public static double TRADE_BALANCE = 0;
+    public static volatile int LEFT_CUSTOMER_NUMBER = 0;
 
 
     public static List<CheckoutTill> CHECKOUT_TILL_LIST = new ArrayList<CheckoutTill>();
@@ -54,10 +56,11 @@ public class Supermarket extends Application {
     //Common UI
     public static GridPane GROUP_ROOT = new GridPane();
     public static FlowPane WAITING_AREA_FLOWPANE = new FlowPane(Orientation.HORIZONTAL, 5, 5);
-    public static Label LABEL_SCALE = new Label(String.valueOf(TRADE_BALANCE));
-    public static Label LABEL_SPAWN_RATE = new Label(String.valueOf(SPAWN_TIME));
+    public static Label LABEL_SCALE = new Label("Trade balance: "+String.valueOf(TRADE_BALANCE));
+    public static Label LABEL_SPAWN_RATE = new Label("Spawn rate: " + String.valueOf(SPAWN_TIME));
     public static Label LABEL_ENQUEUE_REQUESTED = new Label(String.valueOf(ENQUEUE_REQUESTED));
     public static Label LABEL_DEQUEUE_SUCCESSED = new Label(String.valueOf(DEQUEUE_SUCCESSED));
+    public static Label LABEL_LEFT_CUSTOMER = new Label("Left customer: "+String.valueOf(LEFT_CUSTOMER_NUMBER));
 
     public static void main(String[] args)  throws InterruptedException {
         launch(args);
@@ -135,16 +138,26 @@ public class Supermarket extends Application {
         StackPane shoppingAreaStackPane = new StackPane();
         Label label = new Label("Waiting area");
         Rectangle rectangle = new Rectangle(80*5,50);
-        rectangle.setFill(Color.GOLD);
+        rectangle.setFill(Color.WHITE);
         shoppingAreaStackPane.getChildren().addAll(rectangle,label);
         shoppingAreaStackPane.setAccessibleText("Waiting area");
         GROUP_ROOT.add(shoppingAreaStackPane,6,8);
 
+        //Add VBOX to store metric values in a vertical box
+        VBox vBox = new VBox();
+        vBox.setSpacing(10);
+        vBox.getChildren().add(LABEL_ENQUEUE_REQUESTED);
+        vBox.getChildren().add(LABEL_DEQUEUE_SUCCESSED);
+        vBox.getChildren().add(LABEL_SCALE);
+        vBox.getChildren().add(LABEL_SPAWN_RATE);
+        vBox.getChildren().add(LABEL_LEFT_CUSTOMER);
+        GROUP_ROOT.add(vBox,1,10,4,4);
         //Add metrics nodes
-        GROUP_ROOT.add(LABEL_ENQUEUE_REQUESTED,1,10,2,1);
-        GROUP_ROOT.add(LABEL_DEQUEUE_SUCCESSED,1,11,2,1);
-        GROUP_ROOT.add(LABEL_SCALE,1,12,2,1);
-        GROUP_ROOT.add(LABEL_SPAWN_RATE,1,13,2,1);
+//        GROUP_ROOT.add(LABEL_ENQUEUE_REQUESTED,1,10,4,1);
+//        GROUP_ROOT.add(LABEL_DEQUEUE_SUCCESSED,1,11,4,1);
+//        GROUP_ROOT.add(LABEL_SCALE,1,12,4,1);
+//        GROUP_ROOT.add(LABEL_SPAWN_RATE,1,13,4,1);
+//        GROUP_ROOT.add(LABEL_LEFT_CUSTOMER,1,14,4,1);
 
         //Add spawn rate slider
         Slider spawnSlider = new Slider();
@@ -156,14 +169,14 @@ public class Supermarket extends Application {
         spawnSlider.setMinorTickCount(0);
         spawnSlider.setMajorTickUnit(200);
         spawnSlider.setBlockIncrement(100);
-        GROUP_ROOT.add(spawnSlider, 1,14, 6, 1);
+        GROUP_ROOT.add(spawnSlider, 1,15, 6, 1);
 
         spawnSlider.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, //
                                 Number oldValue, Number newValue) {
                 SPAWN_TIME = newValue.intValue();
-                LABEL_SPAWN_RATE.setText(String.valueOf(newValue));
+                LABEL_SPAWN_RATE.setText("Spawn rate: " +String.valueOf(SPAWN_TIME));
 
             }
         });

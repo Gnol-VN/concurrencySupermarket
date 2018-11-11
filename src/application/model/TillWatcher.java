@@ -28,16 +28,17 @@ public class TillWatcher extends Thread{
 
         while (true){
             try {
-                Thread.sleep(4000);
+                Thread.sleep(3000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             TRADE_BALANCE = ENQUEUE_REQUESTED/DEQUEUE_SUCCESSED;
+            TRADE_BALANCE = Math.floor(TRADE_BALANCE * 100) / 100;
             //Begin UI change
             Platform.runLater(new Runnable(){
                 @Override
                 public void run() {
-                    LABEL_SCALE.setText(String.valueOf(TRADE_BALANCE));
+                    LABEL_SCALE.setText("Trade balance: "+String.valueOf(TRADE_BALANCE));
                 }
             });
             //End UI change
