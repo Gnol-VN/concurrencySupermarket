@@ -81,7 +81,7 @@ public class CheckoutTill {
             Platform.runLater(new MyRunnable(this){
                 @Override
                 public void run() {
-                    LABEL_ENQUEUE_REQUESTED.setText(String.valueOf(ENQUEUE_REQUESTED));
+                    LABEL_ENQUEUE_REQUESTED.setText("Entered customer: "+String.valueOf(ENQUEUE_REQUESTED));
                     StackPane customerIcon = customer.getStackPane();
                     this.getCheckoutTill().tillFlowPane.getChildren().add(customerIcon);
                 }
@@ -121,7 +121,7 @@ public class CheckoutTill {
             Platform.runLater(new MyRunnable(this, customer){
                 @Override
                 public void run() {
-                    LABEL_DEQUEUE_SUCCESSED.setText(String.valueOf(DEQUEUE_SUCCESSED));
+                    LABEL_DEQUEUE_SUCCESSED.setText("Dequeued customer: " + String.valueOf(DEQUEUE_SUCCESSED));
                     Supermarket.GROUP_ROOT.getChildren().remove(this.getCustomer().getStackPane());
                     this.getCheckoutTill().tillFlowPane.getChildren().remove(customer.getStackPane());
                     Supermarket.WAITING_AREA_FLOWPANE.getChildren().remove(this.getCustomer().getStackPane());

@@ -50,7 +50,7 @@ public class Customer extends Thread {
 
         //Begin create UI
         StackPane stackPane = new StackPane();
-        Label label = new Label("Customer: "+ customerId);
+        Label label = new Label("Customer: "+ customerId+ "\n"+productList.size());
         Rectangle rectangle = new Rectangle(80,50);
         rectangle.setFill(Color.ORANGE);
         stackPane.getChildren().addAll(rectangle,label);
@@ -81,9 +81,18 @@ public class Customer extends Thread {
             }
         });
         Thread.sleep(FIRST_LOOK_TIME); //First look time
+        TOTAL_WAIT_TIME = TOTAL_WAIT_TIME + FIRST_LOOK_TIME;
         //End UI
         while(enteredQueue == false && lookTimes < MAXIMUM_LOOK_TIMES){
             lookTimes ++;
+            TOTAL_WAIT_TIME = TOTAL_WAIT_TIME + LOOK_AGAIN_TIME;
+            Platform.runLater(new MyRunnable(this){
+                @Override
+                public void run() {
+                    LABEL_TOTAL_WAIT_TIME.setText("Total wait time "+String.valueOf(TOTAL_WAIT_TIME/1000) +"s");
+                }
+            });
+
             if(lookTimes > 3){
                 Thread.sleep(Supermarket.LOOK_AGAIN_TIME);
                 System.out.println(this.customerId+ " look again for "+ lookTimes + "times");

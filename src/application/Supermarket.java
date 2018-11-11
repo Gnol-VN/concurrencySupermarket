@@ -48,7 +48,7 @@ public class Supermarket extends Application {
     public static double DEQUEUE_SUCCESSED = 0;
     public static double TRADE_BALANCE = 0;
     public static volatile int LEFT_CUSTOMER_NUMBER = 0;
-
+    public static volatile int TOTAL_WAIT_TIME = 0;
 
     public static List<CheckoutTill> CHECKOUT_TILL_LIST = new ArrayList<CheckoutTill>();
     public static List<Consumer> consumerList = new ArrayList<>();
@@ -58,9 +58,10 @@ public class Supermarket extends Application {
     public static FlowPane WAITING_AREA_FLOWPANE = new FlowPane(Orientation.HORIZONTAL, 5, 5);
     public static Label LABEL_SCALE = new Label("Trade balance: "+String.valueOf(TRADE_BALANCE));
     public static Label LABEL_SPAWN_RATE = new Label("Spawn rate: " + String.valueOf(SPAWN_TIME));
-    public static Label LABEL_ENQUEUE_REQUESTED = new Label(String.valueOf(ENQUEUE_REQUESTED));
-    public static Label LABEL_DEQUEUE_SUCCESSED = new Label(String.valueOf(DEQUEUE_SUCCESSED));
+    public static Label LABEL_ENQUEUE_REQUESTED = new Label("Enqueued customer: "+String.valueOf(ENQUEUE_REQUESTED));
+    public static Label LABEL_DEQUEUE_SUCCESSED = new Label("Dequeued customer: " + String.valueOf(DEQUEUE_SUCCESSED));
     public static Label LABEL_LEFT_CUSTOMER = new Label("Left customer: "+String.valueOf(LEFT_CUSTOMER_NUMBER));
+    public static Label LABEL_TOTAL_WAIT_TIME = new Label("Total wait time "+String.valueOf(TOTAL_WAIT_TIME));
 
     public static void main(String[] args)  throws InterruptedException {
         launch(args);
@@ -119,6 +120,7 @@ public class Supermarket extends Application {
     public static void prepareUI(Stage primaryStage){
         //Init the properties and constrains of GROUP_ROOT
         GROUP_ROOT.setHgap(80);
+        GROUP_ROOT.setVgap(4);
         GROUP_ROOT.setPadding(new Insets(5));
         final int numCols = 15 ;
         final int numRows = 15 ;
@@ -151,6 +153,7 @@ public class Supermarket extends Application {
         vBox.getChildren().add(LABEL_SCALE);
         vBox.getChildren().add(LABEL_SPAWN_RATE);
         vBox.getChildren().add(LABEL_LEFT_CUSTOMER);
+        vBox.getChildren().add(LABEL_TOTAL_WAIT_TIME);
         GROUP_ROOT.add(vBox,1,10,4,4);
         //Add metrics nodes
 //        GROUP_ROOT.add(LABEL_ENQUEUE_REQUESTED,1,10,4,1);
