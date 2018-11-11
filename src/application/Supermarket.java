@@ -8,9 +8,12 @@ import application.producer_consumer.Producer;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.*;
@@ -18,7 +21,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -29,17 +31,17 @@ import java.util.Random;
 public class Supermarket extends Application {
     //CONSTANT
     public static int NUMBER_OF_CHECKOUT_TILL = 6;
-//    public static int NUMBER_OF_CUSTOMER = 1000;
+    //    public static int NUMBER_OF_CUSTOMER = 1000;
     public static int TILL_LENGTH = 6;
     public static int MAXIMUM_LOOK_TIMES = 6;
     public static Random RANDOM = new Random();
 
 
     //Time
-        //For Customer object
+    //For Customer object
     public static int FIRST_LOOK_TIME = 2000;
     public static int LOOK_AGAIN_TIME = 1000;
-        //For Consumer and Producer objects
+    //For Consumer and Producer objects
     public static int SPAWN_TIME = 600; //200-240
     public static int CONSUMER_START_AFTER_PRODUCER_TIME = 4000;
 
@@ -56,14 +58,14 @@ public class Supermarket extends Application {
     //Common UI
     public static GridPane GROUP_ROOT = new GridPane();
     public static FlowPane WAITING_AREA_FLOWPANE = new FlowPane(Orientation.HORIZONTAL, 5, 5);
-    public static Label LABEL_SCALE = new Label("Trade balance: "+String.valueOf(TRADE_BALANCE));
+    public static Label LABEL_SCALE = new Label("Trade balance: " + String.valueOf(TRADE_BALANCE));
     public static Label LABEL_SPAWN_RATE = new Label("Spawn rate: " + String.valueOf(SPAWN_TIME));
-    public static Label LABEL_ENQUEUE_REQUESTED = new Label("Enqueued customer: "+String.valueOf(ENQUEUE_REQUESTED));
+    public static Label LABEL_ENQUEUE_REQUESTED = new Label("Enqueued customer: " + String.valueOf(ENQUEUE_REQUESTED));
     public static Label LABEL_DEQUEUE_SUCCESSED = new Label("Dequeued customer: " + String.valueOf(DEQUEUE_SUCCESSED));
-    public static Label LABEL_LEFT_CUSTOMER = new Label("Left customer: "+String.valueOf(LEFT_CUSTOMER_NUMBER));
-    public static Label LABEL_TOTAL_WAIT_TIME = new Label("Total wait time "+String.valueOf(TOTAL_WAIT_TIME));
+    public static Label LABEL_LEFT_CUSTOMER = new Label("Left customer: " + String.valueOf(LEFT_CUSTOMER_NUMBER));
+    public static Label LABEL_TOTAL_WAIT_TIME = new Label("Total wait time " + String.valueOf(TOTAL_WAIT_TIME));
 
-    public static void main(String[] args)  throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException {
         launch(args);
     }
 
@@ -71,7 +73,7 @@ public class Supermarket extends Application {
     public void start(Stage primaryStage) throws Exception {
         //Create checkout till
         createTIll();
-
+        CHECKOUT_TILL_LIST.get(0).setLessThanFiveItems(true);
         //Prepare UI
         prepareUI(primaryStage);
 
@@ -94,7 +96,7 @@ public class Supermarket extends Application {
         //Start consumer
         for (int i = 0; i < NUMBER_OF_CHECKOUT_TILL; i++) {
             Consumer consumer = consumerList.get(i);
-            int consumerIndex = i+1;
+            int consumerIndex = i + 1;
             consumer.setName("Consumer " + consumerIndex);
             consumer.start();
         }
@@ -109,7 +111,7 @@ public class Supermarket extends Application {
 
     }
 
-    public static void createTIll(){
+    public static void createTIll() {
         for (int i = 0; i < NUMBER_OF_CHECKOUT_TILL; i++) {
             CheckoutTill checkoutTill = new CheckoutTill(new Scanner());
             checkoutTill.setWorkingStatus(true);
@@ -117,13 +119,13 @@ public class Supermarket extends Application {
         }
     }
 
-    public static void prepareUI(Stage primaryStage){
+    public static void prepareUI(Stage primaryStage) {
         //Init the properties and constrains of GROUP_ROOT
         GROUP_ROOT.setHgap(80);
         GROUP_ROOT.setVgap(4);
         GROUP_ROOT.setPadding(new Insets(5));
-        final int numCols = 15 ;
-        final int numRows = 15 ;
+        final int numCols = 15;
+        final int numRows = 15;
         for (int i = 0; i < numCols; i++) {
             ColumnConstraints colConst = new ColumnConstraints();
             colConst.setPrefWidth(10);
@@ -139,28 +141,54 @@ public class Supermarket extends Application {
         //Add Waiting area node
         StackPane shoppingAreaStackPane = new StackPane();
         Label label = new Label("Waiting area");
-        Rectangle rectangle = new Rectangle(80*5,50);
+        Rectangle rectangle = new Rectangle(80 * 5, 50);
         rectangle.setFill(Color.WHITE);
-        shoppingAreaStackPane.getChildren().addAll(rectangle,label);
+        shoppingAreaStackPane.getChildren().addAll(rectangle, label);
         shoppingAreaStackPane.setAccessibleText("Waiting area");
-        GROUP_ROOT.add(shoppingAreaStackPane,6,8);
+        GROUP_ROOT.add(shoppingAreaStackPane, 6, 8);
+
+        //Add 5 item or less button
+        VBox vBoxForFiveItems = new VBox();
+        vBoxForFiveItems.setSpacing(10);
+
+        for (int i = 0; i < NUMBER_OF_CHECKOUT_TILL; i++) {
+            Button button = new Button();
+            Label status_fiveItems = new Label("None");
+            HBox hBox = new HBox();
+            hBox.getChildren().add(button);
+            hBox.getChildren().add(status_fiveItems);
+            vBoxForFiveItems.getChildren().add(hBox);
+            int tillIndex = i+1;
+            button.setText("Toggle "+tillIndex);
+            button.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    String tillNumber = button.getText().substring(7);
+                    int tillIndex = Integer.parseInt(tillNumber) -1;
+//                    System.out.println(tillNumber);
+                    if(CHECKOUT_TILL_LIST.get(tillIndex).isLessThanFiveItems() == true){
+                        CHECKOUT_TILL_LIST.get(tillIndex).setLessThanFiveItems(false);
+                    }
+                    else  CHECKOUT_TILL_LIST.get(tillIndex).setLessThanFiveItems(true);
+                    String status = String.valueOf(CHECKOUT_TILL_LIST.get(tillIndex).isLessThanFiveItems());
+                    System.out.println(tillNumber + status);
+                    status_fiveItems.setText(status);
+                }
+            });
+        }
+
+        GROUP_ROOT.add(vBoxForFiveItems, 10, 1, 2, 6);
 
         //Add VBOX to store metric values in a vertical box
-        VBox vBox = new VBox();
-        vBox.setSpacing(10);
-        vBox.getChildren().add(LABEL_ENQUEUE_REQUESTED);
-        vBox.getChildren().add(LABEL_DEQUEUE_SUCCESSED);
-        vBox.getChildren().add(LABEL_SCALE);
-        vBox.getChildren().add(LABEL_SPAWN_RATE);
-        vBox.getChildren().add(LABEL_LEFT_CUSTOMER);
-        vBox.getChildren().add(LABEL_TOTAL_WAIT_TIME);
-        GROUP_ROOT.add(vBox,1,10,4,4);
-        //Add metrics nodes
-//        GROUP_ROOT.add(LABEL_ENQUEUE_REQUESTED,1,10,4,1);
-//        GROUP_ROOT.add(LABEL_DEQUEUE_SUCCESSED,1,11,4,1);
-//        GROUP_ROOT.add(LABEL_SCALE,1,12,4,1);
-//        GROUP_ROOT.add(LABEL_SPAWN_RATE,1,13,4,1);
-//        GROUP_ROOT.add(LABEL_LEFT_CUSTOMER,1,14,4,1);
+        VBox vBoxForMetrics = new VBox();
+        vBoxForMetrics.setSpacing(10);
+        vBoxForMetrics.getChildren().add(LABEL_ENQUEUE_REQUESTED);
+        vBoxForMetrics.getChildren().add(LABEL_DEQUEUE_SUCCESSED);
+        vBoxForMetrics.getChildren().add(LABEL_SCALE);
+        vBoxForMetrics.getChildren().add(LABEL_SPAWN_RATE);
+        vBoxForMetrics.getChildren().add(LABEL_LEFT_CUSTOMER);
+        vBoxForMetrics.getChildren().add(LABEL_TOTAL_WAIT_TIME);
+        GROUP_ROOT.add(vBoxForMetrics, 1, 10, 4, 4);
 
         //Add spawn rate slider
         Slider spawnSlider = new Slider();
@@ -172,29 +200,29 @@ public class Supermarket extends Application {
         spawnSlider.setMinorTickCount(0);
         spawnSlider.setMajorTickUnit(200);
         spawnSlider.setBlockIncrement(100);
-        GROUP_ROOT.add(spawnSlider, 1,15, 6, 1);
+        GROUP_ROOT.add(spawnSlider, 1, 15, 6, 1);
 
         spawnSlider.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, //
                                 Number oldValue, Number newValue) {
                 SPAWN_TIME = newValue.intValue();
-                LABEL_SPAWN_RATE.setText("Spawn rate: " +String.valueOf(SPAWN_TIME));
+                LABEL_SPAWN_RATE.setText("Spawn rate: " + String.valueOf(SPAWN_TIME));
 
             }
         });
 
         //Add WAITING_AREA_FLOWPANE node
-        GROUP_ROOT.add(WAITING_AREA_FLOWPANE,6,10,6,6);
+        GROUP_ROOT.add(WAITING_AREA_FLOWPANE, 6, 10, 6, 6);
 
         //Add TILL FLOWPANE for each till
         for (int i = 0; i < NUMBER_OF_CHECKOUT_TILL; i++) {
             CheckoutTill checkoutTill = CHECKOUT_TILL_LIST.get(i);
             GROUP_ROOT.add(checkoutTill.getTillFlowPane(),
-                    1, checkoutTill.getCheckoutId(),10,1 );
+                    1, checkoutTill.getCheckoutId(), 10, 1);
         }
 
-        Scene scene = new Scene(GROUP_ROOT, 1024,768);
+        Scene scene = new Scene(GROUP_ROOT, 1024, 768);
         primaryStage.setTitle("Sample Long");
         primaryStage.setScene(scene);
         primaryStage.show();

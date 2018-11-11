@@ -58,7 +58,7 @@ public class TillWatcher extends Thread{
 
                     Shape shape = (Shape) Supermarket.CHECKOUT_TILL_LIST.get(indexOfTill).getTillStackPane().getChildren().get(0);
                     shape.setFill(Color.GREEN);
-                    System.out.println("Till " + indexOfTill+ "Open");
+                    System.out.println("Till " + indexOfTill+ " open");
                 }
             }
 

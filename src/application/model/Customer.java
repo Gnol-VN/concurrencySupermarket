@@ -38,7 +38,7 @@ public class Customer extends Thread {
         idCount++;
 //        customerId= (int )(Math. random() * 1000 + 1);
         customerId = idCount;
-        int  n = RANDOM.nextInt(8) + 2;
+        int  n = RANDOM.nextInt(8) + 3;
         for (int i = 0; i < n; i++) {
             Product product = new Product();
             productList.add(product);
@@ -116,16 +116,38 @@ public class Customer extends Thread {
 
         if(enteredQueue== false){
             List<Integer> numOfQueuingList = new ArrayList<>();
-            for (CheckoutTill  checkoutTill: CHECKOUT_TILL_LIST) {
-                if(checkoutTill.isWorkingStatus()){
-                    int sizeOfThisQueue = checkoutTill.getCustomerQueueList().size();
-                    numOfQueuingList.add(sizeOfThisQueue);
-                }
-            }
-            //enter a queue with a smallest number of customers
-            queueResult = CHECKOUT_TILL_LIST.get(numOfQueuingList.indexOf(Collections.min(numOfQueuingList)))
-                    .enqueue(this, maxPeopleCanWait);
 
+            //enter a queue with a smallest number of customers
+            if(this.productList.size() <=5){
+                for (CheckoutTill checkoutTill: CHECKOUT_TILL_LIST) {
+                    if(checkoutTill.isWorkingStatus()){
+                        int sizeOfThisQueue = 0;
+                        if(checkoutTill.isLessThanFiveItems()){
+                            sizeOfThisQueue = checkoutTill.getCustomerQueueList().size();
+                        }
+                        else{
+                            sizeOfThisQueue = 99;
+                        }
+                        numOfQueuingList.add(sizeOfThisQueue);
+                    }
+                }
+                int smallestQueueIndex = numOfQueuingList.indexOf(Collections.min(numOfQueuingList));
+                queueResult = CHECKOUT_TILL_LIST.get(smallestQueueIndex)
+                        .enqueue(this, maxPeopleCanWait);
+            }
+            else {
+                for (CheckoutTill  checkoutTill: CHECKOUT_TILL_LIST) {
+                    if(checkoutTill.isWorkingStatus()){
+                        int sizeOfThisQueue = checkoutTill.getCustomerQueueList().size();
+                        if(checkoutTill.isLessThanFiveItems()){
+                            sizeOfThisQueue = 99;
+                        }
+                        numOfQueuingList.add(sizeOfThisQueue);
+                    }
+                }
+                queueResult = CHECKOUT_TILL_LIST.get(numOfQueuingList.indexOf(Collections.min(numOfQueuingList)))
+                        .enqueue(this, maxPeopleCanWait);
+            }
         }
 
         return queueResult;
