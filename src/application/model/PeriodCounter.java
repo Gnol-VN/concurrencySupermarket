@@ -32,36 +32,60 @@ public class PeriodCounter extends Thread {
                     @Override
                     public void run() {
                         if (checkoutTill.getCheckoutId() == 1) {
-                            String runningTime = String.valueOf(checkoutTill.getStopWatch().elapsed(TimeUnit.SECONDS));
-                            String utilization = String.valueOf(Integer.valueOf(runningTime)/SUPERMARKET_WORKING_TIME);
-                            LABEL_UTIL_1.setText("Running for " + runningTime + " Utilization: "+ utilization);
+                            double idleTime = checkoutTill.getStopWatch().elapsed(TimeUnit.SECONDS);
+                            double runningTime = SUPERMARKET_WORKING_TIME - idleTime;
+                            double utilzation = runningTime/SUPERMARKET_WORKING_TIME;
+
+                            String runningTimeString = String.valueOf(runningTime);
+                            String utilizationString = String.valueOf(utilzation);
+                            LABEL_UTIL_1.setText("Till 1 running for " + runningTimeString + " \tUtilization: "+ utilizationString);
                         }
                         if (checkoutTill.getCheckoutId() == 2) {
-                            String runningTime = String.valueOf(checkoutTill.getStopWatch().elapsed(TimeUnit.SECONDS));
-                            String utilization = String.valueOf(Integer.valueOf(runningTime)/SUPERMARKET_WORKING_TIME);
-                            LABEL_UTIL_2.setText("Running for " + runningTime + " Utilization: "+ utilization);
+                            double idleTime = checkoutTill.getStopWatch().elapsed(TimeUnit.SECONDS);
+                            double runningTime = SUPERMARKET_WORKING_TIME - idleTime;
+                            double utilzation = runningTime/SUPERMARKET_WORKING_TIME;
+
+                            String runningTimeString = String.valueOf(runningTime);
+                            String utilizationString = String.valueOf(utilzation);
+                            LABEL_UTIL_2.setText("Till 2 running for " + runningTimeString + " \tUtilization: "+ utilizationString);
                         }
                         if (checkoutTill.getCheckoutId() == 3) {
-                            String runningTime = String.valueOf(checkoutTill.getStopWatch().elapsed(TimeUnit.SECONDS));
-                            String utilization = String.valueOf(Integer.valueOf(runningTime)/SUPERMARKET_WORKING_TIME);
-                            LABEL_UTIL_3.setText("Running for " + runningTime + " Utilization: "+ utilization);
+                            double idleTime = checkoutTill.getStopWatch().elapsed(TimeUnit.SECONDS);
+                            double runningTime = SUPERMARKET_WORKING_TIME - idleTime;
+                            double utilzation = runningTime/SUPERMARKET_WORKING_TIME;
+
+                            String runningTimeString = String.valueOf(runningTime);
+                            String utilizationString = String.valueOf(utilzation);
+                            LABEL_UTIL_3.setText("Till 3 running for " + runningTimeString + " \tUtilization: "+ utilizationString);
                         }
                         if (checkoutTill.getCheckoutId() == 4) {
-                            String runningTime = String.valueOf(checkoutTill.getStopWatch().elapsed(TimeUnit.SECONDS));
-                            String utilization = String.valueOf(Integer.valueOf(runningTime)/SUPERMARKET_WORKING_TIME);
-                            LABEL_UTIL_4.setText("Running for " + runningTime + " Utilization: "+ utilization);
+                            double idleTime = checkoutTill.getStopWatch().elapsed(TimeUnit.SECONDS);
+                            double runningTime = SUPERMARKET_WORKING_TIME - idleTime;
+                            double utilzation = runningTime/SUPERMARKET_WORKING_TIME;
+
+                            String runningTimeString = String.valueOf(runningTime);
+                            String utilizationString = String.valueOf(utilzation);
+                            LABEL_UTIL_4.setText("Till 4 running for " + runningTimeString + " \tUtilization: "+ utilizationString);
                         }
                         if (checkoutTill.getCheckoutId() == 5) {
-                            String runningTime = String.valueOf(checkoutTill.getStopWatch().elapsed(TimeUnit.SECONDS));
-                            String utilization = String.valueOf(Integer.valueOf(runningTime)/SUPERMARKET_WORKING_TIME);
-                            LABEL_UTIL_5.setText("Running for " + runningTime + " Utilization: "+ utilization);
+                            double idleTime = checkoutTill.getStopWatch().elapsed(TimeUnit.SECONDS);
+                            double runningTime = SUPERMARKET_WORKING_TIME - idleTime;
+                            double utilzation = runningTime/SUPERMARKET_WORKING_TIME;
+
+                            String runningTimeString = String.valueOf(runningTime);
+                            String utilizationString = String.valueOf(utilzation);
+                            LABEL_UTIL_5.setText("Till 5 running for " + runningTimeString + " \tUtilization: "+ utilizationString);
                         }
                         if (checkoutTill.getCheckoutId() == 6) {
-                            String runningTime = String.valueOf(checkoutTill.getStopWatch().elapsed(TimeUnit.SECONDS));
-                            String utilization = String.valueOf(Integer.valueOf(runningTime)/SUPERMARKET_WORKING_TIME);
-                            LABEL_UTIL_6.setText("Running for " + runningTime + " Utilization: "+ utilization);
+                            double idleTime = checkoutTill.getStopWatch().elapsed(TimeUnit.SECONDS);
+                            double runningTime = SUPERMARKET_WORKING_TIME - idleTime;
+                            double utilzation = runningTime/SUPERMARKET_WORKING_TIME;
+
+                            String runningTimeString = String.valueOf(runningTime);
+                            String utilizationString = String.valueOf(utilzation);
+                            LABEL_UTIL_6.setText("Till 6 running for " + runningTimeString + " \tUtilization: "+ utilizationString);
                         }
-                        LABEL_WORKING_TIME.setText(String.valueOf(SUPERMARKET_WORKING_TIME));
+                        LABEL_WORKING_TIME.setText("Supermarket opened: "+String.valueOf(SUPERMARKET_WORKING_TIME));
                     }
                 });
 

@@ -41,6 +41,8 @@ public class Supermarket extends Application {
     public static int MAXIMUM_LOOK_TIMES = 6;
     public static Random RANDOM = new Random();
 
+    //Flag
+    public static volatile boolean WORKING_FLAG = true;
 
     //Time
     //For Customer object
@@ -58,11 +60,13 @@ public class Supermarket extends Application {
     public static volatile int TOTAL_WAIT_TIME = 0;
     public static volatile int SUPERMARKET_WORKING_TIME = 0;
 
+    //List
     public static List<CheckoutTill> CHECKOUT_TILL_LIST = new ArrayList<CheckoutTill>();
     public static List<Consumer> consumerList = new ArrayList<>();
 
     //Common UI
     public static GridPane GROUP_ROOT = new GridPane();
+    public static GridPane PAUSE_ROOT = new GridPane();
     public static FlowPane WAITING_AREA_FLOWPANE = new FlowPane(Orientation.HORIZONTAL, 5, 5);
     public static Label LABEL_SCALE = new Label("Trade balance: " + String.valueOf(TRADE_BALANCE));
     public static Label LABEL_SPAWN_RATE = new Label("Spawn rate: " + String.valueOf(SPAWN_TIME));
@@ -146,8 +150,8 @@ public class Supermarket extends Application {
         GROUP_ROOT.setHgap(80);
         GROUP_ROOT.setVgap(4);
         GROUP_ROOT.setPadding(new Insets(5));
-        final int numCols = 15;
-        final int numRows = 15;
+        final int numCols = 16;
+        final int numRows = 16;
         for (int i = 0; i < numCols; i++) {
             ColumnConstraints colConst = new ColumnConstraints();
             colConst.setPrefWidth(10);
@@ -228,7 +232,7 @@ public class Supermarket extends Application {
         spawnSlider.setMinorTickCount(0);
         spawnSlider.setMajorTickUnit(200);
         spawnSlider.setBlockIncrement(100);
-        GROUP_ROOT.add(spawnSlider, 1, 15, 6, 1);
+        GROUP_ROOT.add(spawnSlider, 1, 16, 6, 1);
 
         spawnSlider.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
@@ -250,10 +254,53 @@ public class Supermarket extends Application {
                     1, checkoutTill.getCheckoutId(), 10, 1);
         }
 
-        Scene scene = new Scene(GROUP_ROOT, 1280, 768);
-        GROUP_ROOT.setStyle("-fx-background-color: rgba(0,0,0,0.1);");
+
+
+
+        Scene scene1 = new Scene(GROUP_ROOT, 1280, 900);
+        Scene scene2 = new Scene(PAUSE_ROOT, 1280, 900);
+        scene2Build(primaryStage,scene1,scene2);
+        //Pause button
+        Button pauseButton = new Button("Pause");
+        GROUP_ROOT.add(pauseButton,12,1,4,4);
+
+        pauseButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                primaryStage.setScene(scene2);
+            }
+        });
+
         primaryStage.setTitle("Sample Long");
-        primaryStage.setScene(scene);
+        primaryStage.setScene(scene1);
+
         primaryStage.show();
+    }
+
+    public static void scene2Build(Stage primaryStage, Scene scene1, Scene scene2){
+        Button resumeButton = new Button("Resume");
+        resumeButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                primaryStage.setScene(scene1);
+            }
+        });
+        PAUSE_ROOT.add(resumeButton,12,1,4,4);
+
+        PAUSE_ROOT.setHgap(80);
+        PAUSE_ROOT.setVgap(4);
+        PAUSE_ROOT.setPadding(new Insets(5));
+        final int numCols = 16;
+        final int numRows = 16;
+        for (int i = 0; i < numCols; i++) {
+            ColumnConstraints colConst = new ColumnConstraints();
+            colConst.setPrefWidth(10);
+            PAUSE_ROOT.getColumnConstraints().add(colConst);
+        }
+        for (int i = 0; i < numRows; i++) {
+            RowConstraints rowConst = new RowConstraints();
+            rowConst.setPrefHeight(50);
+            PAUSE_ROOT.getRowConstraints().add(rowConst);
+        }
     }
 }
