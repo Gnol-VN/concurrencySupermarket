@@ -25,14 +25,13 @@ public class CheckoutTill {
     private int checkoutId;
     private boolean workingStatus;
     private boolean lessThanFiveItems;
-    private TillScanner tillScanner;
     private List<Customer> customerQueueList;
     private StackPane tillStackPane;
     private FlowPane tillFlowPane;
     private Stopwatch stopWatch;
+    private double utilization;
 
-    public CheckoutTill(TillScanner tillScanner) {
-        this.tillScanner = tillScanner;
+    public CheckoutTill() {
         idCount++;
         checkoutId = idCount;
         customerQueueList = new ArrayList<>();
@@ -140,13 +139,6 @@ public class CheckoutTill {
     //Getter & Setter
 
 
-    public TillScanner getTillScanner() {
-        return tillScanner;
-    }
-
-    public void setTillScanner(TillScanner tillScanner) {
-        this.tillScanner = tillScanner;
-    }
 
     public List<Customer> getCustomerQueueList() {
         return customerQueueList;
@@ -187,6 +179,13 @@ public class CheckoutTill {
         this.tillStackPane = tillStackPane;
     }
 
+    public double getUtilization() {
+        return utilization;
+    }
+
+    public void setUtilization(double utilization) {
+        this.utilization = utilization;
+    }
 
     public static int getIdCount() {
         return idCount;

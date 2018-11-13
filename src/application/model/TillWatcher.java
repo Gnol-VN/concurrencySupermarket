@@ -27,6 +27,17 @@ public class TillWatcher extends Thread{
         indexOfTill = NUMBER_OF_CHECKOUT_TILL - 1;
 
         while (true){
+            synchronized (WORKING_OBJECT){
+                while(WORKING_FLAG == false){
+                    try {
+                        WORKING_OBJECT.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    WORKING_OBJECT.notifyAll();
+
+                }
+            }
             try {
                 Thread.sleep(3000);
             } catch (InterruptedException e) {
@@ -61,6 +72,7 @@ public class TillWatcher extends Thread{
                     System.out.println("Till " + indexOfTill+ " open");
                 }
             }
+
 
         }
     }

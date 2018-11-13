@@ -83,6 +83,17 @@ public class Customer extends Thread {
         TOTAL_WAIT_TIME = TOTAL_WAIT_TIME + FIRST_LOOK_TIME;
         //End UI
         while(enteredQueue == false && lookTimes < MAXIMUM_LOOK_TIMES){
+            synchronized (WORKING_OBJECT){
+                while(WORKING_FLAG == false){
+                    try {
+                        WORKING_OBJECT.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    WORKING_OBJECT.notifyAll();
+
+                }
+            }
             lookTimes ++;
             TOTAL_WAIT_TIME = TOTAL_WAIT_TIME + LOOK_AGAIN_TIME;
             Platform.runLater(new MyRunnable(this){
@@ -97,6 +108,7 @@ public class Customer extends Thread {
                 System.out.println(this.customerId+ " look again for "+ lookTimes + "times");
             }
             enteredQueue = tryEnterQueue();
+
         }
 
         //Leave if looktimes is exceeded

@@ -12,6 +12,9 @@ public abstract class MyRunnable implements Runnable {
         return customer;
     }
 
+    public MyRunnable() {
+    }
+
     public MyRunnable(CheckoutTill checkoutTill){
         this.checkoutTill = checkoutTill;
     }

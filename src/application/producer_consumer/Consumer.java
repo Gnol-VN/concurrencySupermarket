@@ -27,9 +27,21 @@ public class Consumer extends Thread {
         }
 //        while(!checkoutTill.getCustomerQueueList().isEmpty()){
         while(true){
+            synchronized (WORKING_OBJECT){
+                while(WORKING_FLAG == false){
+                    try {
+                        WORKING_OBJECT.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    WORKING_OBJECT.notifyAll();
+
+                }
+            }
             try {
                 int checkingOutTime = 3000; //simulation
                 checkingOutTime = checkoutTill.getCustomerQueueList().get(0).getTotalCheckingTime();
+                if(NEW_SCANNER) checkingOutTime= checkingOutTime /3;
                 Thread.sleep(checkingOutTime);
                 checkoutTill.dequeue();
 

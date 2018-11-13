@@ -1,6 +1,7 @@
 package application.producer_consumer;
 
 import application.model.Customer;
+
 import static application.Supermarket.*;
 
 /**
@@ -12,10 +13,21 @@ public class Producer extends Thread {
      * Sleep 100ms to stimulate the entering people
      * Create customer and make this customer look for a queue
      */
-    public void run(){
+    public void run() {
 //        for (int i = 0; i < Supermarket.NUMBER_OF_CUSTOMER; i++) {
         this.setPriority(1);
-        while (true){
+        while (true) {
+            synchronized (WORKING_OBJECT){
+                while(WORKING_FLAG == false){
+                    try {
+                        WORKING_OBJECT.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    WORKING_OBJECT.notifyAll();
+
+                }
+            }
             try {
                 Thread.sleep(SPAWN_TIME);
             } catch (InterruptedException e) {
@@ -26,6 +38,7 @@ public class Producer extends Thread {
             ENQUEUE_REQUESTED++;
             customer.setName(String.valueOf(customer.getCustomerId()));
             customer.start();
+
         }
     }
 
