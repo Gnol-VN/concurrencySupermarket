@@ -23,7 +23,7 @@ public class Customer extends Thread {
     private static int idCount;
     private List<Product> productList;
     private int maxPeopleCanWait; //The number which this customer can wait
-    private boolean enteredQueue =false;
+    private boolean enteredQueue = false;
     private int lookTimes;
 
 
@@ -45,7 +45,6 @@ public class Customer extends Thread {
             totalCheckingTime = totalCheckingTime + product.getCheckoutProcessingTime();
 
         }
-//        maxPeopleCanWait = rand.nextInt(3) + 1;
         maxPeopleCanWait = RANDOM.nextInt(7) +3;
 
         //Begin create UI

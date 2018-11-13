@@ -3,12 +3,12 @@ package application.model;
 /**
  * Created by Long laptop on 9/24/2018.
  */
-public class Scanner {
+public class TillScanner {
     private static int scannerId = 0;
     private int sensorSpeed = 2000;
     private int reductionTime = 500;
 
-    public Scanner() {
+    public TillScanner() {
         scannerId++;
     }
 
@@ -17,7 +17,7 @@ public class Scanner {
     }
 
     public static void setScannerId(int scannerId) {
-        Scanner.scannerId = scannerId;
+        TillScanner.scannerId = scannerId;
     }
 
     public int getSensorSpeed() {

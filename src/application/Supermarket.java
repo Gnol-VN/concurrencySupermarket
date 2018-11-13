@@ -1,7 +1,8 @@
 package application;
 
 import application.model.CheckoutTill;
-import application.model.Scanner;
+import application.model.PeriodCounter;
+import application.model.TillScanner;
 import application.model.TillWatcher;
 import application.producer_consumer.Consumer;
 import application.producer_consumer.Producer;
@@ -20,10 +21,14 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Scanner;
 
 /**
  * Created by Long laptop on 9/23/2018.
@@ -51,6 +56,7 @@ public class Supermarket extends Application {
     public static double TRADE_BALANCE = 0;
     public static volatile int LEFT_CUSTOMER_NUMBER = 0;
     public static volatile int TOTAL_WAIT_TIME = 0;
+    public static volatile int SUPERMARKET_WORKING_TIME = 0;
 
     public static List<CheckoutTill> CHECKOUT_TILL_LIST = new ArrayList<CheckoutTill>();
     public static List<Consumer> consumerList = new ArrayList<>();
@@ -64,6 +70,13 @@ public class Supermarket extends Application {
     public static Label LABEL_DEQUEUE_SUCCESSED = new Label("Dequeued customer: " + String.valueOf(DEQUEUE_SUCCESSED));
     public static Label LABEL_LEFT_CUSTOMER = new Label("Left customer: " + String.valueOf(LEFT_CUSTOMER_NUMBER));
     public static Label LABEL_TOTAL_WAIT_TIME = new Label("Total wait time " + String.valueOf(TOTAL_WAIT_TIME));
+    public static Label LABEL_UTIL_1 = new Label("0");
+    public static Label LABEL_UTIL_2 = new Label("0");
+    public static Label LABEL_UTIL_3 = new Label("0");
+    public static Label LABEL_UTIL_4 = new Label("0");
+    public static Label LABEL_UTIL_5 = new Label("0");
+    public static Label LABEL_UTIL_6 = new Label("0");
+    public static Label LABEL_WORKING_TIME = new Label("0");
 
     public static void main(String[] args) throws InterruptedException {
         launch(args);
@@ -77,10 +90,11 @@ public class Supermarket extends Application {
         //Prepare UI
         prepareUI(primaryStage);
 
-
         //Create Till Watcher
         createTillWatcher();
 
+        //Create Period Counter
+        createPeriodCounter();
         //Create producer and consumer
         Producer producer = new Producer();
         producer.setName("Producer 0");
@@ -101,6 +115,14 @@ public class Supermarket extends Application {
             consumer.start();
         }
 
+//        DateFormat dateFormat = new SimpleDateFormat("ss");
+
+    }
+
+    private void createPeriodCounter() {
+        PeriodCounter periodCounter = new PeriodCounter();
+        periodCounter.setName("Period Counter");
+        periodCounter.start();
     }
 
     private void createTillWatcher() {
@@ -113,7 +135,7 @@ public class Supermarket extends Application {
 
     public static void createTIll() {
         for (int i = 0; i < NUMBER_OF_CHECKOUT_TILL; i++) {
-            CheckoutTill checkoutTill = new CheckoutTill(new Scanner());
+            CheckoutTill checkoutTill = new CheckoutTill(new TillScanner());
             checkoutTill.setWorkingStatus(true);
             CHECKOUT_TILL_LIST.add(checkoutTill);
         }
@@ -165,7 +187,6 @@ public class Supermarket extends Application {
                 public void handle(ActionEvent event) {
                     String tillNumber = button.getText().substring(7);
                     int tillIndex = Integer.parseInt(tillNumber) -1;
-//                    System.out.println(tillNumber);
                     if(CHECKOUT_TILL_LIST.get(tillIndex).isLessThanFiveItems() == true){
                         CHECKOUT_TILL_LIST.get(tillIndex).setLessThanFiveItems(false);
                     }
@@ -188,6 +209,13 @@ public class Supermarket extends Application {
         vBoxForMetrics.getChildren().add(LABEL_SPAWN_RATE);
         vBoxForMetrics.getChildren().add(LABEL_LEFT_CUSTOMER);
         vBoxForMetrics.getChildren().add(LABEL_TOTAL_WAIT_TIME);
+        vBoxForMetrics.getChildren().add(LABEL_UTIL_1);
+        vBoxForMetrics.getChildren().add(LABEL_UTIL_2);
+        vBoxForMetrics.getChildren().add(LABEL_UTIL_3);
+        vBoxForMetrics.getChildren().add(LABEL_UTIL_4);
+        vBoxForMetrics.getChildren().add(LABEL_UTIL_5);
+        vBoxForMetrics.getChildren().add(LABEL_UTIL_6);
+        vBoxForMetrics.getChildren().add(LABEL_WORKING_TIME);
         GROUP_ROOT.add(vBoxForMetrics, 1, 10, 4, 4);
 
         //Add spawn rate slider
@@ -222,7 +250,8 @@ public class Supermarket extends Application {
                     1, checkoutTill.getCheckoutId(), 10, 1);
         }
 
-        Scene scene = new Scene(GROUP_ROOT, 1024, 768);
+        Scene scene = new Scene(GROUP_ROOT, 1280, 768);
+        GROUP_ROOT.setStyle("-fx-background-color: rgba(0,0,0,0.1);");
         primaryStage.setTitle("Sample Long");
         primaryStage.setScene(scene);
         primaryStage.show();

@@ -3,6 +3,7 @@ package application.model;
 
 import application.ANSIColor;
 import application.Supermarket;
+import com.google.common.base.Stopwatch;
 import javafx.application.Platform;
 import javafx.geometry.Orientation;
 import javafx.scene.control.Label;
@@ -24,18 +25,19 @@ public class CheckoutTill {
     private int checkoutId;
     private boolean workingStatus;
     private boolean lessThanFiveItems;
-    private Scanner scanner;
+    private TillScanner tillScanner;
     private List<Customer> customerQueueList;
     private StackPane tillStackPane;
     private FlowPane tillFlowPane;
+    private Stopwatch stopWatch;
 
-    public CheckoutTill(Scanner scanner) {
-        this.scanner = scanner;
+    public CheckoutTill(TillScanner tillScanner) {
+        this.tillScanner = tillScanner;
         idCount++;
         checkoutId = idCount;
         customerQueueList = new ArrayList<>();
         System.out.println("Added checkout till with checkoutId: " + checkoutId);
-
+        stopWatch = new Stopwatch();
         //Set UI
         StackPane stackPane = new StackPane();
         Label label = new Label("Till "+idCount);
@@ -137,12 +139,13 @@ public class CheckoutTill {
 
     //Getter & Setter
 
-    public Scanner getScanner() {
-        return scanner;
+
+    public TillScanner getTillScanner() {
+        return tillScanner;
     }
 
-    public void setScanner(Scanner scanner) {
-        this.scanner = scanner;
+    public void setTillScanner(TillScanner tillScanner) {
+        this.tillScanner = tillScanner;
     }
 
     public List<Customer> getCustomerQueueList() {
@@ -184,6 +187,7 @@ public class CheckoutTill {
         this.tillStackPane = tillStackPane;
     }
 
+
     public static int getIdCount() {
         return idCount;
     }
@@ -199,4 +203,13 @@ public class CheckoutTill {
     public void setTillFlowPane(FlowPane tillFlowPane) {
         this.tillFlowPane = tillFlowPane;
     }
+
+    public Stopwatch getStopWatch() {
+        return stopWatch;
+    }
+
+    public void setStopWatch(Stopwatch stopWatch) {
+        this.stopWatch = stopWatch;
+    }
+
 }
