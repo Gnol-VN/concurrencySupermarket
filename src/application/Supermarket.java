@@ -198,7 +198,7 @@ public class Supermarket extends Application {
             button.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                    String tillNumber = button.getText().substring(7);
+                    String tillNumber = button.getText().substring(11);
                     int tillIndex = Integer.parseInt(tillNumber) - 1;
                     if (CHECKOUT_TILL_LIST.get(tillIndex).isLessThanFiveItems() == true) {
                         CHECKOUT_TILL_LIST.get(tillIndex).setLessThanFiveItems(false);
@@ -430,6 +430,21 @@ public class Supermarket extends Application {
                      return;
                 }
                 if(clickedTime == 7){
+                    clickedTime++;
+                    uselessButton.setText("Say");
+                    return;
+                }
+                if(clickedTime == 8){
+                    clickedTime++;
+                    uselessButton.setText("Something");
+                    return;
+                }
+                if(clickedTime == 9){
+                    clickedTime++;
+                    uselessButton.setText("Like");
+                    return;
+                }
+                if(clickedTime == 10){
                     clickedTime++;
                     uselessButton.setText("WILL");
                     primaryStage.setScene(scene4);
