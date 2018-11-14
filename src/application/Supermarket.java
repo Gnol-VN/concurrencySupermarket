@@ -127,7 +127,6 @@ public class Supermarket extends Application {
             consumer.start();
         }
 
-//        DateFormat dateFormat = new SimpleDateFormat("ss");
 
     }
 
@@ -286,10 +285,10 @@ public class Supermarket extends Application {
         });
 
 
-        Scene scene1 = new Scene(GROUP_ROOT, 1280, 900);
-        Scene scene2 = new Scene(PAUSE_ROOT, 1280, 900);
-        Scene scene3 = new Scene(GRAPH_ROOT, 1280, 900);
-        Scene scene4 = new Scene(USELESS_ROOT, 1280, 900);
+        Scene scene1 = new Scene(GROUP_ROOT, 1280, 900); //Main scene for displaying the supermarket
+        Scene scene2 = new Scene(PAUSE_ROOT, 1280, 900); //Setting scene when press pause butoon
+        Scene scene3 = new Scene(GRAPH_ROOT, 1280, 900); //Scene for displaying the graph
+        Scene scene4 = new Scene(USELESS_ROOT, 1280, 900); //Scene for happy birthday
         scene2Build(primaryStage, scene1, scene2,scene3,scene4);
         scene3Build(primaryStage,scene2,scene3);
         scene4Build(primaryStage,scene2);
@@ -311,10 +310,10 @@ public class Supermarket extends Application {
     }
 
     private static void scene4Build(Stage primaryStage, Scene scene2) {
-        Label label = new Label("HAPPY BIRTHDAY \nKAVYA");
+        Label label = new Label("TÔI NHỚ CÁC ANH EM\nGNOL ^^");
         label.setFont(new Font("Arial", 70));
         label.setTextFill(Color.CYAN);
-        USELESS_ROOT.add(label,  4,5,9,7);
+        USELESS_ROOT.add(label,  3,5,10,7);
 
         USELESS_ROOT.setHgap(80);
         USELESS_ROOT.setVgap(4);
@@ -390,6 +389,8 @@ public class Supermarket extends Application {
             }
         });
         Button uselessButton = new Button("More");
+        uselessButton.setStyle("-fx-font: 30  arial; -fx-base: #b6e7c9;");
+
 
         uselessButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -452,7 +453,7 @@ public class Supermarket extends Application {
 
             }
         });
-        PAUSE_ROOT.add(uselessButton,14,14,4,4);
+        PAUSE_ROOT.add(uselessButton,13,14,4,4);
 
         Button graphButton = new Button("Statistic");
         PAUSE_ROOT.add(graphButton, 7, 3, 4, 4);
