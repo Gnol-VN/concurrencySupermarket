@@ -62,12 +62,12 @@ public class Supermarket extends Application {
     public static volatile double AVERAGE_WAIT_TIME = 0;
     public static volatile double AVERAGE_UTIL = 0;
     public static volatile int SUPERMARKET_WORKING_TIME = 0;
+    public static int clickedTime = 0;
 
     //List
     public static List<CheckoutTill> CHECKOUT_TILL_LIST = new ArrayList<CheckoutTill>();
     public static List<Consumer> consumerList = new ArrayList<>();
     public static List<LeftCustomerTuple> LEFT_CUSTOMER_LIST = new ArrayList<>();
-    public static int clickedTime = 0;
     //Common UI
     public static GridPane GROUP_ROOT = new GridPane();
     public static GridPane PAUSE_ROOT = new GridPane();
@@ -288,7 +288,7 @@ public class Supermarket extends Application {
         Scene scene1 = new Scene(GROUP_ROOT, 1280, 900); //Main scene for displaying the supermarket
         Scene scene2 = new Scene(PAUSE_ROOT, 1280, 900); //Setting scene when press pause butoon
         Scene scene3 = new Scene(GRAPH_ROOT, 1280, 900); //Scene for displaying the graph
-        Scene scene4 = new Scene(USELESS_ROOT, 1280, 900); //Scene for happy birthday
+        Scene scene4 = new Scene(USELESS_ROOT, 1280, 900); //Scene for happy day
         scene2Build(primaryStage, scene1, scene2,scene3,scene4);
         scene3Build(primaryStage,scene2,scene3);
         scene4Build(primaryStage,scene2);
@@ -303,14 +303,14 @@ public class Supermarket extends Application {
             }
         });
 
-        primaryStage.setTitle("Sample Long");
+        primaryStage.setTitle("Vietnamese Supermarket");
         primaryStage.setScene(scene1);
 
         primaryStage.show();
     }
 
     private static void scene4Build(Stage primaryStage, Scene scene2) {
-        Label label = new Label("TÔI NHỚ CÁC ANH EM\nGNOL ^^");
+        Label label = new Label("HAVE A GOOD DAY\nDr. Chris ^^");
         label.setFont(new Font("Arial", 70));
         label.setTextFill(Color.CYAN);
         USELESS_ROOT.add(label,  3,5,10,7);
