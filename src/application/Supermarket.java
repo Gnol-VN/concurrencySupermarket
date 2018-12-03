@@ -107,6 +107,7 @@ public class Supermarket extends Application {
 
         //Create Period Counter
         createPeriodCounter();
+
         //Create producer and consumer
         Producer producer = new Producer();
         producer.setName("Producer 0");
@@ -153,7 +154,7 @@ public class Supermarket extends Application {
     }
 
     public static void prepareUI(Stage primaryStage) {
-        //Init the properties and constrains of GROUP_ROOT
+        //1. Init the properties and constrains of GROUP_ROOT
         GROUP_ROOT.setHgap(80);
         GROUP_ROOT.setVgap(4);
         GROUP_ROOT.setPadding(new Insets(5));
@@ -170,8 +171,8 @@ public class Supermarket extends Application {
             GROUP_ROOT.getRowConstraints().add(rowConst);
         }
 
-        //Add nodes to GROUP_ROOT
-        //Add Waiting area node
+        //2. Add nodes to GROUP_ROOT
+        //2.1 Add Waiting area node
         StackPane shoppingAreaStackPane = new StackPane();
         Label label = new Label("Waiting area");
         Rectangle rectangle = new Rectangle(80 * 5, 50);
@@ -180,7 +181,7 @@ public class Supermarket extends Application {
         shoppingAreaStackPane.setAccessibleText("Waiting area");
         GROUP_ROOT.add(shoppingAreaStackPane, 6, 8);
 
-        //Add 5 item or less button
+        //2.2 Add 5 item or less button
         VBox vBoxForFiveItems = new VBox();
         vBoxForFiveItems.setSpacing(32);
 
@@ -211,7 +212,7 @@ public class Supermarket extends Application {
 
         GROUP_ROOT.add(vBoxForFiveItems, 10, 1, 4, 6);
 
-        //Add VBOX to store metric values in a vertical box
+        //2.3 Add bottom-left VBOX to store metric values in a vertical box
         VBox vBoxForMetrics = new VBox();
         vBoxForMetrics.setSpacing(10);
         vBoxForMetrics.getChildren().add(LABEL_ENQUEUE_REQUESTED);
@@ -232,7 +233,7 @@ public class Supermarket extends Application {
         vBoxForMetrics.getChildren().add(LABEL_WORKING_TIME);
         GROUP_ROOT.add(vBoxForMetrics, 1, 10, 4, 4);
 
-        //Add spawn rate slider
+        //2.4 Add spawn rate slider
         Slider spawnSlider = new Slider();
         spawnSlider.setMin(200);
         spawnSlider.setMax(1000);
@@ -254,16 +255,17 @@ public class Supermarket extends Application {
             }
         });
 
-        //Add WAITING_AREA_FLOWPANE node
+        //2.5 Add WAITING_AREA_FLOWPANE node
         GROUP_ROOT.add(WAITING_AREA_FLOWPANE, 6, 10, 6, 6);
 
-        //Add TILL FLOWPANE for each till
+        //2.6 Add TILL FLOWPANE for each till
         for (int i = 0; i < NUMBER_OF_CHECKOUT_TILL; i++) {
             CheckoutTill checkoutTill = CHECKOUT_TILL_LIST.get(i);
             GROUP_ROOT.add(checkoutTill.getTillFlowPane(),
                     1, checkoutTill.getCheckoutId(), 10, 1);
         }
 
+        //2.7 Add pause button
         Button setWorkingFlag = new Button("PAUSE supermarket");
         GROUP_ROOT.add(setWorkingFlag, 13, 13, 4, 4);
         setWorkingFlag.setOnAction(new EventHandler<ActionEvent>() {
@@ -285,6 +287,7 @@ public class Supermarket extends Application {
         });
 
 
+        //3 prepare scene
         Scene scene1 = new Scene(GROUP_ROOT, 1280, 900); //Main scene for displaying the supermarket
         Scene scene2 = new Scene(PAUSE_ROOT, 1280, 900); //Setting scene when press pause butoon
         Scene scene3 = new Scene(GRAPH_ROOT, 1280, 900); //Scene for displaying the graph
@@ -293,10 +296,10 @@ public class Supermarket extends Application {
         scene3Build(primaryStage,scene2,scene3);
         scene4Build(primaryStage,scene2);
         //Pause button
-        Button pauseButton = new Button("Setting");
-        GROUP_ROOT.add(pauseButton, 13, 0, 4, 4);
+        Button settingButton = new Button("Setting");
+        GROUP_ROOT.add(settingButton, 13, 0, 4, 4);
 
-        pauseButton.setOnAction(new EventHandler<ActionEvent>() {
+        settingButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 primaryStage.setScene(scene2);

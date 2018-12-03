@@ -11,7 +11,7 @@ import static application.Supermarket.*;
  */
 public class TillWatcher extends Thread{
     /**
-     * Till watcher will loop for each 4000ms to capture the number of in-out customer
+     * Till watcher will loop for each 3000ms to capture the number of in-out customer
      * If the @TRADE_BALANCE is less than 1,2, till watcher will disable a till
      * else, till watchcer will open a disabled till.
      */

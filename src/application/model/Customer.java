@@ -36,7 +36,6 @@ public class Customer extends Thread {
     public Customer() {
         productList = new ArrayList<Product>();
         idCount++;
-//        customerId= (int )(Math. random() * 1000 + 1);
         customerId = idCount;
         int  n = RANDOM.nextInt(8) + 3;
         for (int i = 0; i < n; i++) {
@@ -79,9 +78,13 @@ public class Customer extends Thread {
                 WAITING_AREA_FLOWPANE.getChildren().add(this.getCustomer().getStackPane());
             }
         });
+        //End UI
+
+        //Calculate look time
         Thread.sleep(FIRST_LOOK_TIME); //First look time
         TOTAL_WAIT_TIME = TOTAL_WAIT_TIME + FIRST_LOOK_TIME;
-        //End UI
+
+        //Customer keeps looking when he hasn't enterd and he can endure for @MAXIMUM_LOOK_TIMES
         while(enteredQueue == false && lookTimes < MAXIMUM_LOOK_TIMES){
             synchronized (WORKING_OBJECT){
                 while(WORKING_FLAG == false){
@@ -103,8 +106,8 @@ public class Customer extends Thread {
                 }
             });
 
+            Thread.sleep(Supermarket.LOOK_AGAIN_TIME);
             if(lookTimes > 3){
-                Thread.sleep(Supermarket.LOOK_AGAIN_TIME);
                 System.out.println(this.customerId+ " look again for "+ lookTimes + "times");
             }
             enteredQueue = tryEnterQueue();
@@ -129,6 +132,10 @@ public class Customer extends Thread {
             List<Integer> numOfQueuingList = new ArrayList<>();
 
             //enter a queue with a smallest number of customers
+            //Algorithms: loop through each queue, check if it is working.
+            //then get the size (people) of each queue, then TRY to enter the smallest queue
+
+            //Option 1: he has less than 6 products
             if(this.productList.size() <=5){
                 for (CheckoutTill checkoutTill: CHECKOUT_TILL_LIST) {
                     if(checkoutTill.isWorkingStatus()){
@@ -146,6 +153,9 @@ public class Customer extends Thread {
                 queueResult = CHECKOUT_TILL_LIST.get(smallestQueueIndex)
                         .enqueue(this, maxPeopleCanWait);
             }
+
+
+            //Option 2: he has more than 6 products
             else {
                 for (CheckoutTill  checkoutTill: CHECKOUT_TILL_LIST) {
                     if(checkoutTill.isWorkingStatus()){
